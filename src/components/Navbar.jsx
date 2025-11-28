@@ -8,10 +8,12 @@ const LOGO_URL = 'https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.fire
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, signInWithGoogle, signOut, loading } = useAuth();
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const { user, signOut, loading, getUserInitials } = useAuth();
   const location = useLocation();
 
   const isLandingPage = location.pathname === '/';
+  const isAuthPage = location.pathname === '/signin' || location.pathname === '/signup';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,8 +23,25 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.user-menu')) {
+        setShowUserDropdown(false);
+      }
+    };
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  const handleSignOut = async () => {
+    await signOut();
+    setShowUserDropdown(false);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <nav className={`navbar ${isScrolled || !isLandingPage ? 'scrolled' : ''}`}>
+    <nav className={`navbar ${isScrolled || !isLandingPage ? 'scrolled' : ''} ${isAuthPage ? 'auth-navbar' : ''}`}>
       <div className="nav-container">
         <Link to="/" className="nav-logo">
           <div className="logo-icon">
@@ -60,20 +79,77 @@ function Navbar() {
             <>
               {user ? (
                 <div className="user-menu">
-                  <img 
-                    src={user.photoURL} 
-                    alt={user.displayName} 
-                    className="user-avatar"
-                  />
-                  <span className="user-name">{user.displayName?.split(' ')[0]}</span>
-                  <button onClick={signOut} className="sign-out-btn">
-                    Sign Out
+                  <button 
+                    className="user-menu-trigger"
+                    onClick={() => setShowUserDropdown(!showUserDropdown)}
+                  >
+                    {user.photoURL ? (
+                      <img 
+                        src={user.photoURL} 
+                        alt={user.displayName || 'User'} 
+                        className="user-avatar"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className="user-avatar-initials">
+                        {getUserInitials()}
+                      </div>
+                    )}
+                    <span className="user-name">{user.displayName?.split(' ')[0] || 'User'}</span>
+                    <svg className={`dropdown-arrow ${showUserDropdown ? 'open' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
                   </button>
+                  
+                  {showUserDropdown && (
+                    <div className="user-dropdown">
+                      <div className="dropdown-header">
+                        {user.photoURL ? (
+                          <img 
+                            src={user.photoURL} 
+                            alt={user.displayName || 'User'} 
+                            className="dropdown-avatar"
+                            referrerPolicy="no-referrer"
+                          />
+                        ) : (
+                          <div className="dropdown-avatar-initials">
+                            {getUserInitials()}
+                          </div>
+                        )}
+                        <div className="dropdown-user-info">
+                          <span className="dropdown-name">{user.displayName || 'User'}</span>
+                          <span className="dropdown-email">{user.email}</span>
+                        </div>
+                      </div>
+                      <div className="dropdown-divider"></div>
+                      <button onClick={handleSignOut} className="dropdown-item sign-out">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                          <polyline points="16 17 21 12 16 7"/>
+                          <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        Sign Out
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
-                <button onClick={signInWithGoogle} className="nav-cta">
-                  Sign In
-                </button>
+                <div className="auth-buttons">
+                  <Link 
+                    to="/signin" 
+                    className="nav-signin"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                  <Link 
+                    to="/signup" 
+                    className="nav-cta"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Get Started
+                  </Link>
+                </div>
               )}
             </>
           )}

@@ -10,6 +10,8 @@ import Footer from './components/Footer';
 import ChatPage from './pages/ChatPage';
 import VoicePage from './pages/VoicePage';
 import ImagePage from './pages/ImagePage';
+import SignInPage from './pages/SignInPage';
+import SignUpPage from './pages/SignUpPage';
 import './App.css';
 
 // Landing Page Component
@@ -39,6 +41,8 @@ function App() {
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/voice" element={<VoicePage />} />
               <Route path="/image" element={<ImagePage />} />
+              <Route path="/signin" element={<SignInPage />} />
+              <Route path="/signup" element={<SignUpPage />} />
             </Routes>
           </main>
         </div>
