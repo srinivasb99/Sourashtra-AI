@@ -1,0 +1,217 @@
+/* ============================================
+   How It Works Section
+   ============================================ */
+
+.how-it-works {
+  padding: var(--space-4xl) 0;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.section-header.center {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Steps Container */
+.steps-container {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+  margin-top: var(--space-3xl);
+}
+
+.step-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.step {
+  background: var(--gray-100);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  width: 280px;
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.step.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: var(--delay);
+}
+
+.step:hover {
+  background: var(--mint-light);
+  transform: translateY(-5px);
+}
+
+.step-number {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--teal-primary);
+  opacity: 0.3;
+  line-height: 1;
+  margin-bottom: var(--space-md);
+}
+
+.step-content h3 {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-sm);
+  color: var(--navy-dark);
+}
+
+.step-content p {
+  font-size: 0.9375rem;
+  color: var(--gray-500);
+  line-height: 1.6;
+}
+
+/* Step Visual */
+.step-visual {
+  margin-top: var(--space-xl);
+  display: flex;
+  justify-content: center;
+}
+
+/* Phone Mockup */
+.phone-mockup {
+  width: 100px;
+  height: 160px;
+  background: var(--navy-dark);
+  border-radius: 16px;
+  padding: 8px;
+  box-shadow: var(--shadow-lg);
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--teal-primary) 0%, var(--teal-dark) 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-ui {
+  text-align: center;
+  color: var(--white);
+}
+
+.app-logo-small {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.app-text {
+  font-size: 0.625rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.app-button {
+  background: var(--white);
+  color: var(--teal-dark);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.625rem;
+  font-weight: 600;
+}
+
+/* Mic Animation */
+.mic-animation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.mic-icon {
+  font-size: 2.5rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.sound-waves {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.sound-waves span {
+  width: 4px;
+  height: 20px;
+  background: var(--teal-primary);
+  border-radius: 2px;
+  animation: wave 0.8s ease-in-out infinite;
+}
+
+.sound-waves span:nth-child(1) { animation-delay: 0s; height: 12px; }
+.sound-waves span:nth-child(2) { animation-delay: 0.15s; height: 24px; }
+.sound-waves span:nth-child(3) { animation-delay: 0.3s; height: 16px; }
+
+/* Connection Visual */
+.connection-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.connect-icon {
+  font-size: 2.5rem;
+}
+
+.connect-hearts span {
+  font-size: 1rem;
+  animation: float 2s ease-in-out infinite;
+}
+
+/* Step Connector */
+.step-connector {
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-300);
+  opacity: 0;
+  transition: opacity 0.6s ease 0.5s;
+}
+
+.step-connector.visible {
+  opacity: 1;
+}
+
+.step-connector svg {
+  width: 60px;
+  height: 30px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .steps-container {
+    flex-direction: column;
+    gap: var(--space-lg);
+  }
+
+  .step-wrapper {
+    flex-direction: column;
+  }
+
+  .step {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .step-connector {
+    transform: rotate(90deg);
+    width: 60px;
+    height: 40px;
+  }
+}
+

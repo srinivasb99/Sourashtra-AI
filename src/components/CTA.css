@@ -1,0 +1,133 @@
+/* ============================================
+   CTA Section
+   ============================================ */
+
+.cta-section {
+  padding: var(--space-4xl) 0;
+  background: var(--white);
+}
+
+.cta-card {
+  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-primary) 50%, var(--teal-dark) 100%);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4xl);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.cta-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cta-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(45, 156, 156, 0.3) 0%, transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(45, 156, 156, 0.2) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cta-content h2 {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  color: var(--white);
+  margin-bottom: var(--space-md);
+}
+
+.cta-content > p {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.0625rem;
+  margin-bottom: var(--space-2xl);
+}
+
+.btn-large {
+  padding: var(--space-lg) var(--space-2xl);
+  font-size: 1.0625rem;
+}
+
+.cta-note {
+  margin-top: var(--space-lg);
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Floating Elements */
+.cta-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-elements {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.float-el {
+  position: absolute;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-full);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+  font-weight: 500;
+  animation: float 6s ease-in-out infinite;
+}
+
+.el-1 {
+  top: 15%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.el-2 {
+  top: 25%;
+  right: 10%;
+  animation-delay: 1.5s;
+}
+
+.el-3 {
+  bottom: 25%;
+  left: 15%;
+  animation-delay: 3s;
+}
+
+.el-4 {
+  bottom: 15%;
+  right: 15%;
+  animation-delay: 4.5s;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cta-card {
+    padding: var(--space-2xl);
+  }
+
+  .floating-elements {
+    display: none;
+  }
+}
+
