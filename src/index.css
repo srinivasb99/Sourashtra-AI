@@ -267,3 +267,62 @@ p {
   color: var(--white);
 }
 
+/* ============================================
+   Mobile-First Enhancements
+   ============================================ */
+
+/* Prevent horizontal scroll on mobile */
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* Touch-friendly tap targets */
+@media (max-width: 768px) {
+  button, a, input, select, textarea {
+    min-height: 44px;
+  }
+  
+  /* Smaller section tag on mobile */
+  .section-tag {
+    font-size: 0.6875rem;
+    padding: var(--space-xs) var(--space-sm);
+  }
+  
+  /* Adjusted typography for mobile */
+  p {
+    font-size: 1rem;
+  }
+  
+  h1 {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+  
+  h2 {
+    font-size: clamp(1.5rem, 6vw, 2.25rem);
+  }
+  
+  h3 {
+    font-size: clamp(1.125rem, 4vw, 1.375rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 var(--space-md);
+  }
+  
+  /* Prevent text from being too small */
+  body {
+    font-size: 15px;
+  }
+}
+
+/* Safe area insets for notched devices */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+}
+

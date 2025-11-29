@@ -134,12 +134,51 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .cta-section {
+    padding: var(--space-2xl) var(--space-md);
+  }
+  
   .cta-card {
-    padding: var(--space-2xl);
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
+  }
+  
+  .cta-content h2 {
+    font-size: clamp(1.5rem, 5vw, 2rem);
+  }
+  
+  .cta-content > p {
+    font-size: 1rem;
+    margin-bottom: var(--space-xl);
+  }
+  
+  .btn-large {
+    padding: var(--space-md) var(--space-xl);
+    font-size: 1rem;
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .cta-note {
+    font-size: 0.8125rem;
   }
 
   .floating-elements {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-section {
+    padding: var(--space-xl) var(--space-sm);
+  }
+  
+  .cta-card {
+    padding: var(--space-lg);
+  }
+  
+  .cta-content > p {
+    font-size: 0.9375rem;
   }
 }
 

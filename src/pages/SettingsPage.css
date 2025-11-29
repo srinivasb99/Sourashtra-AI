@@ -618,20 +618,69 @@
 }
 
 /* Responsive */
+@media (max-width: 768px) {
+  .settings-page {
+    padding: 1.5rem 1rem;
+    padding-top: 85px;
+  }
+  
+  .settings-section {
+    padding: 1.25rem;
+  }
+  
+  .settings-section .section-header h2 {
+    font-size: 1rem;
+  }
+  
+  .detail-icon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .detail-label {
+    font-size: 0.6875rem;
+  }
+  
+  .detail-value {
+    font-size: 0.875rem;
+  }
+  
+  .settings-action-btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
 @media (max-width: 640px) {
   .settings-page {
     padding: 1rem;
-    padding-top: 80px;
+    padding-top: 75px;
   }
 
   .settings-header h1 {
     font-size: 1.5rem;
+  }
+  
+  .settings-header p {
+    font-size: 0.875rem;
+  }
+  
+  .settings-section {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .settings-section .section-header {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
   }
 
   .account-info-card {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    gap: 1.5rem;
   }
 
   .profile-avatar-large,
@@ -639,6 +688,11 @@
     width: 80px;
     height: 80px;
     font-size: 2rem;
+  }
+  
+  .photo-edit-btn {
+    width: 28px;
+    height: 28px;
   }
 
   .account-details {
@@ -654,10 +708,19 @@
   .danger-content {
     flex-direction: column;
     text-align: center;
+    gap: 1rem;
   }
 
   .danger-info {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0;
+  }
+  
+  .danger-info h3 {
+    font-size: 0.9375rem;
+  }
+  
+  .danger-info p {
+    font-size: 0.8125rem;
   }
 
   .settings-form-actions {
@@ -671,9 +734,39 @@
   .settings-page .settings-btn-primary {
     order: 1;
   }
+  
+  .settings-page .settings-form-group input {
+    font-size: 16px; /* Prevent iOS zoom */
+    padding: 0.875rem 1rem;
+  }
+
+  .settings-page .settings-modal-overlay {
+    padding: 0.75rem;
+  }
+  
+  .settings-page .settings-modal-content {
+    max-width: 100%;
+  }
+  
+  .settings-page .settings-modal-header {
+    padding: 1.25rem;
+  }
+  
+  .settings-page .settings-modal-header h2 {
+    font-size: 1.125rem;
+  }
+  
+  .settings-page .settings-modal-body {
+    padding: 1.25rem;
+  }
+  
+  .settings-page .warning-text {
+    font-size: 0.875rem;
+  }
 
   .settings-page .settings-modal-actions {
     flex-direction: column;
+    padding: 1rem;
   }
 
   .settings-page .settings-modal-actions .settings-btn-cancel {
@@ -682,5 +775,37 @@
 
   .settings-page .settings-modal-actions .settings-btn-danger {
     order: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-page {
+    padding: 0.75rem;
+    padding-top: 70px;
+  }
+  
+  .settings-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .settings-header h1 {
+    font-size: 1.375rem;
+  }
+  
+  .settings-section {
+    border-radius: var(--radius-lg);
+  }
+  
+  .profile-avatar-large,
+  .profile-avatar-initials-large {
+    width: 70px;
+    height: 70px;
+    font-size: 1.75rem;
+    border-width: 3px;
+  }
+  
+  .provider-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
   }
 }

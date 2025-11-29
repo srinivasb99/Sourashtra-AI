@@ -351,30 +351,83 @@
 @media (max-width: 600px) {
   .auth-form {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
 
   .auth-container {
     max-width: 100%;
+  }
+  
+  .google-btn {
+    padding: 12px 20px;
+    font-size: 0.9375rem;
+  }
+  
+  .auth-submit-btn {
+    padding: 12px 20px;
+    font-size: 0.9375rem;
   }
 }
 
 @media (max-width: 480px) {
   .auth-page {
     padding: 1rem;
-    padding-top: 80px;
+    padding-top: 70px;
+    min-height: 100vh;
   }
 
   .auth-container {
-    padding: 1.5rem 1.25rem;
+    padding: 1.25rem 1rem;
     border-radius: var(--radius-lg);
   }
 
   .auth-header h1 {
-    font-size: 1.5rem;
+    font-size: 1.375rem;
+  }
+  
+  .auth-header p {
+    font-size: 0.8125rem;
   }
 
   .auth-logo {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
+  }
+  
+  .auth-divider {
+    margin: 0.875rem 0;
+  }
+  
+  .auth-divider span {
+    font-size: 0.75rem;
+    padding: 0 0.75rem;
+  }
+  
+  .form-group label {
+    font-size: 0.8125rem;
+  }
+  
+  .form-group input {
+    padding: 12px 12px;
+    font-size: 16px; /* Prevent iOS zoom */
+  }
+  
+  .auth-footer {
+    margin-top: 1rem;
+    padding-top: 0.875rem;
+  }
+  
+  .auth-footer p {
+    font-size: 0.875rem;
+  }
+  
+  .forgot-password-link a {
+    font-size: 0.75rem;
+  }
+  
+  .auth-error,
+  .auth-success {
+    padding: 0.875rem;
+    font-size: 0.8125rem;
   }
 }

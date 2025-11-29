@@ -3,7 +3,7 @@ import { useChat } from '../hooks/useChat';
 import { useAuth } from '../context/AuthContext';
 import { 
   MessageCircle, Book, MessageSquare, Home, ArrowUp, 
-  Plus, Trash2, X, FileText, Image as ImageIcon, Video, Pencil, Check
+  Plus, Trash2, X, FileText, Image as ImageIcon, Video, Pencil, Check, Menu
 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -40,6 +40,7 @@ function ChatPage() {
   const [attachments, setAttachments] = useState([]);
   const [editingChatId, setEditingChatId] = useState(null);
   const [editingName, setEditingName] = useState('');
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -117,13 +118,39 @@ function ChatPage() {
   return (
     <div className="chat-page">
       <div className="chat-container">
+        {/* Mobile Sidebar Toggle */}
+        <button 
+          className="mobile-sidebar-toggle"
+          onClick={() => setIsMobileSidebarOpen(true)}
+          aria-label="Open chat history"
+        >
+          <Menu size={20} />
+        </button>
+        
+        {/* Mobile Sidebar Overlay */}
+        {isMobileSidebarOpen && (
+          <div 
+            className="mobile-sidebar-overlay"
+            onClick={() => setIsMobileSidebarOpen(false)}
+          />
+        )}
+        
         {/* Sidebar */}
-        <aside className="chat-sidebar">
+        <aside className={`chat-sidebar ${isMobileSidebarOpen ? 'mobile-open' : ''}`}>
           <div className="sidebar-header">
             <h3>Chats</h3>
+            <div className="sidebar-header-actions">
             <button className="new-chat-btn" onClick={startNewChat} title="New chat">
               <Plus size={18} />
             </button>
+              <button 
+                className="mobile-sidebar-close"
+                onClick={() => setIsMobileSidebarOpen(false)}
+                aria-label="Close sidebar"
+              >
+                <X size={18} />
+              </button>
+            </div>
           </div>
 
           <div className="chats-list">
@@ -146,7 +173,12 @@ function ChatPage() {
                       <div 
                         key={chat.id}
                         className={`chat-item ${chat.id === currentChatId ? 'active' : ''}`}
-                        onClick={() => editingChatId !== chat.id && selectChat(chat.id)}
+                        onClick={() => {
+                          if (editingChatId !== chat.id) {
+                            selectChat(chat.id);
+                            setIsMobileSidebarOpen(false);
+                          }
+                        }}
                       >
                         <MessageCircle size={16} />
                         {editingChatId === chat.id ? (

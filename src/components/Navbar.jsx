@@ -121,7 +121,10 @@ function Navbar() {
                   <Link 
                     to="/settings" 
                     className="dropdown-item"
-                    onClick={() => setShowUserDropdown(false)}
+                    onClick={() => {
+                      setShowUserDropdown(false);
+                      setIsMobileMenuOpen(false);
+                    }}
                   >
                     <Settings size={18} />
                     Settings

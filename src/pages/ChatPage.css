@@ -1021,6 +1021,82 @@ a.msg-attachment-file:hover {
 }
 
 /* ============================================
+   Mobile Sidebar Toggle & Overlay
+   ============================================ */
+
+.mobile-sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 68px;
+  left: 12px;
+  z-index: 50;
+  width: 40px;
+  height: 40px;
+  background: var(--white);
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-sidebar-toggle:hover {
+  background: #f3f4f6;
+  color: var(--teal-primary);
+}
+
+.mobile-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 240;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mobile-sidebar-close {
+  display: none;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border-radius: 8px;
+  color: #6b7280;
+  transition: all 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.mobile-sidebar-close:hover {
+  background: #fee2e2;
+  color: #ef4444;
+}
+
+.sidebar-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Hide close button on desktop */
+@media (min-width: 769px) {
+  .mobile-sidebar-close {
+    display: none !important;
+  }
+}
+
+/* ============================================
    Responsive
    ============================================ */
 
@@ -1032,10 +1108,37 @@ a.msg-attachment-file:hover {
   .chat-container {
     grid-template-columns: 1fr;
     height: calc(100vh - 56px);
+    position: relative;
+  }
+  
+  .mobile-sidebar-toggle {
+    display: flex;
+  }
+  
+  .mobile-sidebar-close {
+    display: flex;
   }
 
   .chat-sidebar {
-    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 85vw;
+    z-index: 250;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+  }
+  
+  .chat-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  
+  .sidebar-header {
+    padding-top: 20px;
   }
 
   .messages-container {
@@ -1045,42 +1148,176 @@ a.msg-attachment-file:hover {
   .messages-list {
     padding: 0 16px;
   }
+  
+  .chat-welcome {
+    padding: 24px 16px;
+  }
+  
+  .chat-welcome h2 {
+    font-size: 1.25rem;
+  }
+  
+  .chat-welcome > p {
+    font-size: 0.875rem;
+  }
+  
+  .welcome-subtitle {
+    white-space: normal !important;
+  }
 
   .quick-prompts {
     grid-template-columns: 1fr;
     max-width: 100%;
+    gap: 10px;
+  }
+  
+  .quick-prompt {
+    padding: 12px 14px;
+  }
+  
+  .prompt-text {
+    font-size: 0.8125rem;
   }
 
   .chat-input-area {
     padding: 12px 0 16px;
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
   }
 
   .input-form {
-    padding: 0 16px;
+    padding: 0 12px;
+  }
+  
+  .input-box {
+    border-radius: 16px;
   }
 
   .input-row {
-    gap: 4px;
+    gap: 6px;
     padding: 10px 12px;
+  }
+  
+  .input-row input {
+    font-size: 16px; /* Prevents zoom on iOS */
   }
 
   .attachments-inside {
-    padding: 12px;
+    padding: 10px 12px;
     gap: 8px;
   }
-
-  .attachment-avatar {
-    width: 40px;
-    height: 40px;
+  
+  .attachment-image {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .attachment-video {
+    width: 160px;
   }
 
   .attachment-card {
     padding: 8px 10px;
+    max-width: 100%;
   }
 
   .add-btn,
   .send-btn {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+  }
+  
+  /* Message styling for mobile */
+  .message {
+    gap: 8px;
+  }
+  
+  .message-avatar {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .message-text {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    border-radius: 14px;
+  }
+  
+  .message.user .message-text {
+    border-radius: 14px 14px 4px 14px;
+  }
+  
+  .message.assistant .message-text {
+    border-radius: 14px 14px 14px 4px;
+  }
+  
+  .msg-attachment-image {
+    max-width: 220px;
+  }
+  
+  .msg-attachment-image img {
+    max-height: 180px;
+  }
+  
+  .msg-attachment-video {
+    max-width: 260px;
+  }
+  
+  .msg-attachment-video video {
+    max-height: 180px;
+  }
+  
+  .msg-attachment-name {
+    max-width: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-page {
+    padding-top: 52px;
+  }
+  
+  .chat-container {
+    height: calc(100vh - 52px);
+  }
+  
+  .mobile-sidebar-toggle {
+    top: 62px;
+    left: 8px;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .chat-sidebar {
+    width: 260px;
+  }
+  
+  .messages-list {
+    padding: 0 12px;
+    gap: 16px;
+  }
+  
+  .message-content {
+    max-width: calc(100% - 36px);
+  }
+  
+  .input-form {
+    padding: 0 8px;
+  }
+  
+  .input-row {
+    padding: 8px 10px;
+  }
+  
+  .add-btn,
+  .send-btn {
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+  }
+  
+  .welcome-logo {
+    width: 56px;
+    height: 56px;
   }
 }

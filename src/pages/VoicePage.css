@@ -404,6 +404,64 @@
    Responsive
    ============================================ */
 
+@media (max-width: 768px) {
+  .voice-page {
+    padding: 75px var(--space-md) var(--space-lg);
+  }
+  
+  .voice-header {
+    margin-bottom: var(--space-xl);
+  }
+  
+  .voice-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .voice-header p {
+    font-size: 0.9375rem;
+  }
+  
+  .voice-main {
+    padding: var(--space-xl);
+    gap: var(--space-lg);
+  }
+  
+  .voice-orb-container {
+    width: 180px;
+    height: 180px;
+  }
+  
+  .orb-core {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .orb-logo {
+    width: 65px;
+    height: 65px;
+  }
+  
+  .ring-1 { width: 115px; height: 115px; }
+  .ring-2 { width: 145px; height: 145px; }
+  .ring-3 { width: 175px; height: 175px; }
+  
+  .voice-status {
+    font-size: 0.9375rem;
+  }
+  
+  .voice-transcript {
+    padding: var(--space-md);
+  }
+  
+  .voice-transcript h3 {
+    font-size: 0.8125rem;
+  }
+  
+  .transcript-list {
+    max-height: 200px;
+  }
+}
+
 @media (max-width: 640px) {
   .voice-page {
     padding: 70px var(--space-sm) var(--space-md);
@@ -412,9 +470,14 @@
   .voice-header h1 {
     font-size: 1.5rem;
   }
+  
+  .voice-header p {
+    font-size: 0.875rem;
+  }
 
   .voice-main {
-    padding: var(--space-xl) var(--space-md);
+    padding: var(--space-lg) var(--space-md);
+    gap: var(--space-md);
   }
 
   .voice-orb-container {
@@ -452,12 +515,24 @@
   .voice-controls {
     flex-direction: column;
     width: 100%;
+    gap: var(--space-sm);
   }
 
   .voice-btn {
     width: 100%;
     justify-content: center;
     padding: var(--space-md);
+    font-size: 0.875rem;
+  }
+  
+  .voice-error {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.8125rem;
+  }
+
+  .transcript-item {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.8125rem;
   }
 
   .transcript-item.user {
@@ -466,5 +541,55 @@
 
   .transcript-item.ai {
     margin-right: var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .voice-page {
+    padding: 65px var(--space-xs) var(--space-sm);
+  }
+  
+  .voice-container {
+    max-width: 100%;
+  }
+  
+  .voice-header {
+    margin-bottom: var(--space-md);
+  }
+  
+  .voice-header h1 {
+    font-size: 1.375rem;
+  }
+  
+  .voice-main {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+  }
+  
+  .voice-orb-container {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .orb-core {
+    width: 75px;
+    height: 75px;
+  }
+  
+  .orb-logo {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .ring-1 { width: 90px; height: 90px; }
+  .ring-2 { width: 115px; height: 115px; }
+  .ring-3 { width: 135px; height: 135px; }
+  
+  .voice-transcript {
+    padding: var(--space-sm);
+  }
+  
+  .transcript-list {
+    max-height: 180px;
   }
 }
