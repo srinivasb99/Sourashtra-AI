@@ -17371,7 +17371,7 @@ wss.on('connection', (ws) => {
 });
 
 const PORT = process.env.PORT || 3002;
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Sourashtra AI Server running on port ${PORT}`);
   console.log(`📡 WebSocket Live API available at ws://localhost:${PORT}/api/live`);
   console.log(`🤖 Using models:`, MODELS);
