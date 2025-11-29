@@ -326,3 +326,30 @@ html, body {
   }
 }
 
+/* ============================================
+   Chat Page Body Lock (Mobile)
+   ============================================ */
+
+/* When chat page is active on mobile, prevent body scroll */
+body.chat-active {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+}
+
+@media (max-width: 768px) {
+  body.chat-active {
+    touch-action: none;
+  }
+  
+  body.chat-active .chat-page {
+    touch-action: pan-y;
+  }
+  
+  body.chat-active .messages-container {
+    touch-action: pan-y;
+  }
+}
+

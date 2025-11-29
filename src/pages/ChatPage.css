@@ -4,15 +4,18 @@
 
 .chat-page {
   height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   padding-top: 60px;
   background: #ffffff;
   overflow: hidden;
+  position: relative;
 }
 
 .chat-container {
   display: grid;
   grid-template-columns: 260px 1fr;
   height: calc(100vh - 60px);
+  height: calc(100dvh - 60px);
   overflow: hidden;
 }
 
@@ -1103,16 +1106,45 @@ a.msg-attachment-file:hover {
 @media (max-width: 768px) {
   .chat-page {
     padding-top: 56px;
+    height: 100vh;
+    height: 100dvh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
   }
 
   .chat-container {
     grid-template-columns: 1fr;
     height: calc(100vh - 56px);
+    height: calc(100dvh - 56px);
     position: relative;
+    overflow: hidden;
+  }
+  
+  .chat-main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+  
+  .messages-container {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    padding: 16px 0;
   }
   
   .mobile-sidebar-toggle {
     display: flex;
+    top: 72px;
   }
   
   .mobile-sidebar-close {
@@ -1141,16 +1173,19 @@ a.msg-attachment-file:hover {
     padding-top: 20px;
   }
 
-  .messages-container {
-    padding: 16px 0;
-  }
-
   .messages-list {
     padding: 0 16px;
+    padding-top: 16px;
   }
   
   .chat-welcome {
     padding: 24px 16px;
+    padding-top: 32px;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   
   .chat-welcome h2 {
@@ -1180,8 +1215,11 @@ a.msg-attachment-file:hover {
   }
 
   .chat-input-area {
+    flex-shrink: 0;
     padding: 12px 0 16px;
     padding-bottom: max(16px, env(safe-area-inset-bottom));
+    background: #ffffff;
+    border-top: 1px solid #f0f0f0;
   }
 
   .input-form {
@@ -1279,10 +1317,11 @@ a.msg-attachment-file:hover {
   
   .chat-container {
     height: calc(100vh - 52px);
+    height: calc(100dvh - 52px);
   }
   
   .mobile-sidebar-toggle {
-    top: 62px;
+    top: 68px;
     left: 8px;
     width: 36px;
     height: 36px;
@@ -1319,5 +1358,10 @@ a.msg-attachment-file:hover {
   .welcome-logo {
     width: 56px;
     height: 56px;
+  }
+  
+  .chat-input-area {
+    padding: 10px 0 12px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
 }

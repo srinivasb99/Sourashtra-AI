@@ -545,7 +545,7 @@
 
 @media (max-width: 768px) {
   .image-page {
-    padding: 75px var(--space-md) var(--space-md);
+    padding: 90px var(--space-md) var(--space-md);
   }
   
   .main-content {
@@ -666,7 +666,7 @@
 
 @media (max-width: 600px) {
   .image-page {
-    padding: 70px var(--space-sm) var(--space-md);
+    padding: 85px var(--space-sm) var(--space-md);
   }
 
   .prompt-section {
@@ -751,7 +751,7 @@
 
 @media (max-width: 480px) {
   .image-page {
-    padding: 65px var(--space-xs) var(--space-sm);
+    padding: 80px var(--space-xs) var(--space-sm);
   }
   
   .settings-panel {

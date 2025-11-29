@@ -621,7 +621,7 @@
 @media (max-width: 768px) {
   .settings-page {
     padding: 1.5rem 1rem;
-    padding-top: 85px;
+    padding-top: 90px;
   }
   
   .settings-section {
@@ -654,7 +654,7 @@
 @media (max-width: 640px) {
   .settings-page {
     padding: 1rem;
-    padding-top: 75px;
+    padding-top: 85px;
   }
 
   .settings-header h1 {
@@ -781,7 +781,7 @@
 @media (max-width: 480px) {
   .settings-page {
     padding: 0.75rem;
-    padding-top: 70px;
+    padding-top: 80px;
   }
   
   .settings-header {

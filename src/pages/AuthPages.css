@@ -372,7 +372,7 @@
 @media (max-width: 480px) {
   .auth-page {
     padding: 1rem;
-    padding-top: 70px;
+    padding-top: 80px;
     min-height: 100vh;
   }
 

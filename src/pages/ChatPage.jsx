@@ -54,6 +54,14 @@ function ChatPage() {
     scrollToBottom();
   }, [messages]);
 
+  // Add body class for mobile scroll lock
+  useEffect(() => {
+    document.body.classList.add('chat-active');
+    return () => {
+      document.body.classList.remove('chat-active');
+    };
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if ((input.trim() || attachments.length > 0) && !isLoading) {

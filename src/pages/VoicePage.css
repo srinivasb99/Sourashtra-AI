@@ -406,7 +406,7 @@
 
 @media (max-width: 768px) {
   .voice-page {
-    padding: 75px var(--space-md) var(--space-lg);
+    padding: 90px var(--space-md) var(--space-lg);
   }
   
   .voice-header {
@@ -464,7 +464,7 @@
 
 @media (max-width: 640px) {
   .voice-page {
-    padding: 70px var(--space-sm) var(--space-md);
+    padding: 85px var(--space-sm) var(--space-md);
   }
 
   .voice-header h1 {
@@ -546,7 +546,7 @@
 
 @media (max-width: 480px) {
   .voice-page {
-    padding: 65px var(--space-xs) var(--space-sm);
+    padding: 80px var(--space-xs) var(--space-sm);
   }
   
   .voice-container {
