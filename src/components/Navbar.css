@@ -25,9 +25,9 @@
 }
 
 .nav-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 var(--space-lg);
+  padding: 0 var(--space-xl);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -96,6 +96,9 @@
 }
 
 .nav-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.9375rem;
   font-weight: 500;
   color: var(--gray-600);
@@ -103,6 +106,10 @@
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-md);
   transition: all var(--transition-fast);
+}
+
+.nav-links a svg {
+  flex-shrink: 0;
 }
 
 .auth-navbar .nav-links a {
@@ -301,7 +308,9 @@
   background: var(--gray-200);
 }
 
-.dropdown-item {
+.dropdown-item,
+a.dropdown-item,
+button.dropdown-item {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
@@ -314,6 +323,16 @@
   cursor: pointer;
   transition: all var(--transition-fast);
   text-align: left;
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
+.dropdown-item svg,
+a.dropdown-item svg,
+button.dropdown-item svg {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
 }
 
 .dropdown-item:hover {
@@ -326,10 +345,6 @@
   color: #ef4444;
 }
 
-.dropdown-item svg {
-  width: 18px;
-  height: 18px;
-}
 
 /* Mobile Menu Button */
 .mobile-menu-btn {

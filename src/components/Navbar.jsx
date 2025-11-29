@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { MessageCircle, Mic, Image, LogOut, ChevronDown, Settings } from 'lucide-react';
 import './Navbar.css';
 
-const LOGO_URL = 'https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar.png?alt=media&token=9284aeb3-8cbd-4cc1-bed3-35d9f889283a';
+const LOGO_URL = 'https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d';
 
 function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  const { user, signOut, loading, getUserInitials } = useAuth();
+  const { user, signOut, getUserInitials } = useAuth();
   const location = useLocation();
 
   const isLandingPage = location.pathname === '/';
-  const isAuthPage = location.pathname === '/signin' || location.pathname === '/signup';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,7 +41,7 @@ function Navbar() {
   };
 
   return (
-    <nav className={`navbar ${isScrolled || !isLandingPage ? 'scrolled' : ''} ${isAuthPage ? 'auth-navbar' : ''}`}>
+    <nav className={`navbar ${isScrolled || !isLandingPage ? 'scrolled' : ''}`}>
       <div className="nav-container">
         <Link to="/" className="nav-logo">
           <div className="logo-icon">
@@ -58,100 +58,98 @@ function Navbar() {
             className={location.pathname === '/chat' ? 'active' : ''}
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            💬 Chat
+            <MessageCircle size={18} /> Chat
           </Link>
           <Link 
             to="/voice" 
             className={location.pathname === '/voice' ? 'active' : ''}
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            🎙️ Voice
+            <Mic size={18} /> Voice
           </Link>
           <Link 
             to="/image" 
             className={location.pathname === '/image' ? 'active' : ''}
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            🎨 Image
+            <Image size={18} /> Image
           </Link>
           
-          {!loading && (
-            <>
-              {user ? (
-                <div className="user-menu">
-                  <button 
-                    className="user-menu-trigger"
-                    onClick={() => setShowUserDropdown(!showUserDropdown)}
-                  >
+          {user ? (
+            <div className="user-menu">
+              <button 
+                className="user-menu-trigger"
+                onClick={() => setShowUserDropdown(!showUserDropdown)}
+              >
+                {user.photoURL ? (
+                  <img 
+                    src={user.photoURL} 
+                    alt={user.displayName || 'User'} 
+                    className="user-avatar"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <div className="user-avatar-initials">
+                    {getUserInitials()}
+                  </div>
+                )}
+                <span className="user-name">{user.displayName?.split(' ')[0] || 'User'}</span>
+                <ChevronDown size={16} className={`dropdown-arrow ${showUserDropdown ? 'open' : ''}`} />
+              </button>
+              
+              {showUserDropdown && (
+                <div className="user-dropdown">
+                  <div className="dropdown-header">
                     {user.photoURL ? (
                       <img 
                         src={user.photoURL} 
                         alt={user.displayName || 'User'} 
-                        className="user-avatar"
+                        className="dropdown-avatar"
                         referrerPolicy="no-referrer"
                       />
                     ) : (
-                      <div className="user-avatar-initials">
+                      <div className="dropdown-avatar-initials">
                         {getUserInitials()}
                       </div>
                     )}
-                    <span className="user-name">{user.displayName?.split(' ')[0] || 'User'}</span>
-                    <svg className={`dropdown-arrow ${showUserDropdown ? 'open' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                  </button>
-                  
-                  {showUserDropdown && (
-                    <div className="user-dropdown">
-                      <div className="dropdown-header">
-                        {user.photoURL ? (
-                          <img 
-                            src={user.photoURL} 
-                            alt={user.displayName || 'User'} 
-                            className="dropdown-avatar"
-                            referrerPolicy="no-referrer"
-                          />
-                        ) : (
-                          <div className="dropdown-avatar-initials">
-                            {getUserInitials()}
-                          </div>
-                        )}
-                        <div className="dropdown-user-info">
-                          <span className="dropdown-name">{user.displayName || 'User'}</span>
-                          <span className="dropdown-email">{user.email}</span>
-                        </div>
-                      </div>
-                      <div className="dropdown-divider"></div>
-                      <button onClick={handleSignOut} className="dropdown-item sign-out">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                          <polyline points="16 17 21 12 16 7"/>
-                          <line x1="21" y1="12" x2="9" y2="12"/>
-                        </svg>
-                        Sign Out
-                      </button>
+                    <div className="dropdown-user-info">
+                      <span className="dropdown-name">{user.displayName || 'User'}</span>
+                      <span className="dropdown-email">{user.email}</span>
                     </div>
-                  )}
-                </div>
-              ) : (
-                <div className="auth-buttons">
+                  </div>
+                  <div className="dropdown-divider"></div>
                   <Link 
-                    to="/signin" 
-                    className="nav-signin"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                    to="/settings" 
+                    className="dropdown-item"
+                    onClick={() => setShowUserDropdown(false)}
                   >
-                    Sign In
+                    <Settings size={18} />
+                    Settings
                   </Link>
-                  <Link 
-                    to="/signup" 
-                    className="nav-cta"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Get Started
-                  </Link>
+                  <button onClick={handleSignOut} className="dropdown-item sign-out">
+                    <LogOut size={18} />
+                    Sign Out
+                  </button>
                 </div>
               )}
-            </>
+            </div>
+          ) : (
+            <div className="auth-buttons">
+              <Link 
+                to="/signin" 
+                className="nav-signin"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Sign In
+              </Link>
+              <Link 
+                to="/signup" 
+                className="nav-cta"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Get Started
+              </Link>
+            </div>
           )}
         </div>
 

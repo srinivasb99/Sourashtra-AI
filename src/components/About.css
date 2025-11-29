@@ -4,7 +4,7 @@
 
 .about {
   padding: var(--space-4xl) 0;
-  background: linear-gradient(180deg, var(--mint-light) 0%, var(--mint) 100%);
+  background: #F1F7F7;
   overflow: hidden;
 }
 
@@ -75,14 +75,16 @@
 /* Heritage Symbol */
 .heritage-symbol {
   position: relative;
-  width: 350px;
-  height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
 }
 
 .symbol-outer {
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: 300px;
+  height: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -90,19 +92,29 @@
 
 .symbol-ring {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 280px;
+  height: 280px;
   border: 3px solid var(--teal-primary);
   border-radius: 50%;
-  animation: pulse 4s ease-in-out infinite;
 }
 
 .symbol-core {
-  font-size: 5rem;
-  color: var(--navy-dark);
-  font-weight: 700;
+  width: 140px;
+  height: 140px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 2;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+  border: 3px solid var(--teal-primary);
+}
+
+.symbol-logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
 }
 
 /* Symbol People */
@@ -143,18 +155,16 @@
 .symbol-people span:nth-child(7) { transform: translate(-50%, -50%) rotate(270deg) translateY(-120px); }
 .symbol-people span:nth-child(8) { transform: translate(-50%, -50%) rotate(315deg) translateY(-120px); }
 
-/* Text Ring */
-.symbol-text-ring {
-  position: absolute;
-  width: 320px;
-  height: 320px;
+/* Text Below Symbol */
+.symbol-text-below {
+  text-align: center;
 }
 
 .ring-text {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  letter-spacing: 0.3em;
-  color: var(--gray-400);
+  letter-spacing: 0.2em;
+  color: var(--teal-primary);
   text-transform: uppercase;
 }
 
@@ -169,18 +179,24 @@
     order: -1;
   }
 
-  .heritage-symbol {
-    width: 280px;
-    height: 280px;
+  .symbol-outer {
+    width: 250px;
+    height: 250px;
   }
 
   .symbol-core {
-    font-size: 4rem;
+    width: 110px;
+    height: 110px;
+  }
+
+  .symbol-logo {
+    width: 75px;
+    height: 75px;
   }
 
   .symbol-people {
-    width: 220px;
-    height: 220px;
+    width: 200px;
+    height: 200px;
   }
 
   .symbol-people span {
@@ -188,13 +204,13 @@
     height: 20px;
   }
 
-  .symbol-people span:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateY(-95px); }
-  .symbol-people span:nth-child(2) { transform: translate(-50%, -50%) rotate(45deg) translateY(-95px); }
-  .symbol-people span:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg) translateY(-95px); }
-  .symbol-people span:nth-child(4) { transform: translate(-50%, -50%) rotate(135deg) translateY(-95px); }
-  .symbol-people span:nth-child(5) { transform: translate(-50%, -50%) rotate(180deg) translateY(-95px); }
-  .symbol-people span:nth-child(6) { transform: translate(-50%, -50%) rotate(225deg) translateY(-95px); }
-  .symbol-people span:nth-child(7) { transform: translate(-50%, -50%) rotate(270deg) translateY(-95px); }
-  .symbol-people span:nth-child(8) { transform: translate(-50%, -50%) rotate(315deg) translateY(-95px); }
+  .symbol-people span:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateY(-85px); }
+  .symbol-people span:nth-child(2) { transform: translate(-50%, -50%) rotate(45deg) translateY(-85px); }
+  .symbol-people span:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg) translateY(-85px); }
+  .symbol-people span:nth-child(4) { transform: translate(-50%, -50%) rotate(135deg) translateY(-85px); }
+  .symbol-people span:nth-child(5) { transform: translate(-50%, -50%) rotate(180deg) translateY(-85px); }
+  .symbol-people span:nth-child(6) { transform: translate(-50%, -50%) rotate(225deg) translateY(-85px); }
+  .symbol-people span:nth-child(7) { transform: translate(-50%, -50%) rotate(270deg) translateY(-85px); }
+  .symbol-people span:nth-child(8) { transform: translate(-50%, -50%) rotate(315deg) translateY(-85px); }
 }
 

@@ -1,3 +1,4 @@
+import { Heart } from 'lucide-react'
 import './Footer.css'
 
 function Footer() {
@@ -8,7 +9,11 @@ function Footer() {
           <div className="footer-brand">
             <a href="#" className="nav-logo">
               <div className="logo-icon">
-                <span className="logo-symbol">ஃ</span>
+                <img 
+                  src="https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d" 
+                  alt="Sourashtra AI"
+                  className="logo-img"
+                />
               </div>
               <span className="logo-text">
                 Sourashtra<span className="ai-text">AI</span>
@@ -32,19 +37,19 @@ function Footer() {
               <a href="https://sourashtraassociation.org/" target="_blank" rel="noopener noreferrer">
                 Sourashtra Association
               </a>
-              <a href="https://sourashtraassociation.org/poltam-classes-spoken-sourashtra/" target="_blank" rel="noopener noreferrer">
+              <a href="https://sourashtraassociation.org/poltam-homepage/" target="_blank" rel="noopener noreferrer">
                 poLTam Classes
               </a>
-              <a href="https://sourashtraassociation.org/literacy-foundation-classes-written-sourashtra/" target="_blank" rel="noopener noreferrer">
+              <a href="https://sourashtraassociation.org/literacy-homepage/" target="_blank" rel="noopener noreferrer">
                 Literacy Foundation
               </a>
             </div>
             <div className="footer-col">
               <h4>Connect</h4>
-              <a href="https://sourashtraassociation.org/contact/" target="_blank" rel="noopener noreferrer">
-                Contact Us
+              <a href="https://sourashtraassociation.org/support-questionnaire/" target="_blank" rel="noopener noreferrer">
+                Get Help
               </a>
-              <a href="https://sourashtraassociation.org/become-a-volunteer/" target="_blank" rel="noopener noreferrer">
+              <a href="https://sourashtraassociation.org/sa-volunteer-sign-up-form/" target="_blank" rel="noopener noreferrer">
                 Volunteer
               </a>
               <a href="https://sourashtraassociation.org/become-a-donor/" target="_blank" rel="noopener noreferrer">
@@ -69,4 +74,3 @@ function Footer() {
 }
 
 export default Footer
-

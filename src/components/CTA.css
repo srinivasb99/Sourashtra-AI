@@ -4,11 +4,11 @@
 
 .cta-section {
   padding: var(--space-4xl) 0;
-  background: var(--white);
+  background: #F1F7F7;
 }
 
 .cta-card {
-  background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-primary) 50%, var(--teal-dark) 100%);
+  background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal-primary) 50%, var(--teal-light) 100%);
   border-radius: var(--radius-xl);
   padding: var(--space-4xl);
   position: relative;
@@ -59,6 +59,18 @@
 .btn-large {
   padding: var(--space-lg) var(--space-2xl);
   font-size: 1.0625rem;
+}
+
+/* White CTA Button */
+.cta-content .btn-primary.btn-large {
+  background: var(--white);
+  color: var(--teal-dark);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.cta-content .btn-primary.btn-large:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
 }
 
 .cta-note {

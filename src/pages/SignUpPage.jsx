@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './AuthPages.css';
@@ -10,8 +10,15 @@ function SignUpPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signInWithGoogle, signUpWithEmail } = useAuth();
+  const { user, signInWithGoogle, signUpWithEmail } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/chat');
+    }
+  }, [user, navigate]);
 
   const handleEmailSignUp = async (e) => {
     e.preventDefault();
@@ -31,7 +38,7 @@ function SignUpPage() {
 
     try {
       await signUpWithEmail(email, password, name);
-      navigate('/');
+      navigate('/chat');
     } catch (err) {
       setError(getErrorMessage(err.code));
     } finally {
@@ -45,7 +52,7 @@ function SignUpPage() {
 
     try {
       await signInWithGoogle();
-      navigate('/');
+      navigate('/chat');
     } catch (err) {
       setError(getErrorMessage(err.code));
     } finally {
@@ -73,12 +80,21 @@ function SignUpPage() {
       <div className="auth-container">
         <div className="auth-header">
           <img 
-            src="https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar.png?alt=media&token=9284aeb3-8cbd-4cc1-bed3-35d9f889283a" 
+            src="https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d" 
             alt="Sourashtra AI" 
             className="auth-logo"
           />
           <h1>Create Account</h1>
           <p>Join the Sourashtra AI community</p>
+        </div>
+
+        <div className="auth-notice-box">
+          <div className="notice-content">
+            <span className="notice-title">✨ You can use Sourashtra AI without creating an account!</span>
+          </div>
+          <Link to="/chat" className="notice-cta">
+            Try It Now →
+          </Link>
         </div>
 
         {error && <div className="auth-error">{error}</div>}

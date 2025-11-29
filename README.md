@@ -25,7 +25,7 @@ Sourashtra AI is a **completely free** platform designed to preserve and teach t
 
 ### 💬 Chat
 - Real-time streaming responses
-- Responses primarily in Sourashtra (Tamil script)
+- Responses primarily in Sourashtra (Roman script)
 - Cultural context and heritage knowledge
 
 ### 🎙️ Live Voice Mode

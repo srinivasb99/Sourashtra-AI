@@ -1,31 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../config/firebase';
 import API_URL from '../config/api';
+import { 
+  Image, Square, Monitor, Smartphone, Camera, Film, 
+  Sparkles, Palette, Theater, Download, AlertTriangle,
+  Copy, Landmark, Flower2, Settings
+} from 'lucide-react';
 import './ImagePage.css';
 
 // Available options
 const ASPECT_RATIOS = [
-  { value: '1:1', label: 'Square (1:1)', icon: '⬜' },
-  { value: '16:9', label: 'Landscape (16:9)', icon: '🖼️' },
-  { value: '9:16', label: 'Portrait (9:16)', icon: '📱' },
-  { value: '4:3', label: 'Standard (4:3)', icon: '🖥️' },
-  { value: '3:4', label: 'Portrait (3:4)', icon: '📷' },
-  { value: '3:2', label: 'Photo (3:2)', icon: '📸' },
-  { value: '2:3', label: 'Portrait Photo (2:3)', icon: '🎞️' },
-  { value: '21:9', label: 'Ultra Wide (21:9)', icon: '🎬' },
+  { value: '1:1', label: 'Square', icon: <Square size={14} /> },
+  { value: '16:9', label: 'Wide', icon: <Monitor size={14} /> },
+  { value: '9:16', label: 'Tall', icon: <Smartphone size={14} /> },
+  { value: '4:3', label: 'Standard', icon: <Monitor size={14} /> },
 ];
 
 const RESOLUTIONS = [
-  { value: '1K', label: '1K (Standard)', desc: 'Fast generation' },
-  { value: '2K', label: '2K (High Quality)', desc: 'Balanced quality' },
-  { value: '4K', label: '4K (Ultra HD)', desc: 'Maximum detail' },
+  { value: '1K', label: '1K' },
+  { value: '2K', label: '2K' },
+  { value: '4K', label: '4K' },
 ];
 
 const STYLES = [
-  { value: 'default', label: 'Default', icon: '✨', desc: 'AI chooses best style' },
-  { value: 'cultural', label: 'Cultural', icon: '🎭', desc: 'Sourashtra heritage themes' },
-  { value: 'photorealistic', label: 'Photorealistic', icon: '📷', desc: 'Photo-like quality' },
-  { value: 'artistic', label: 'Artistic', icon: '🎨', desc: 'Creative interpretation' },
+  { value: 'default', label: 'Default', icon: <Sparkles size={14} /> },
+  { value: 'cultural', label: 'Cultural', icon: <Theater size={14} /> },
+  { value: 'photorealistic', label: 'Photo', icon: <Camera size={14} /> },
+  { value: 'artistic', label: 'Artistic', icon: <Palette size={14} /> },
 ];
 
 function ImagePage() {
@@ -38,30 +42,100 @@ function ImagePage() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [history, setHistory] = useState([]);
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+  
+  // Track if history has been modified locally (not just loaded from Firestore)
+  const historyModifiedRef = useRef(false);
+  const initialLoadCompleteRef = useRef(false);
+
+  // Load image history from Firestore when user logs in
+  useEffect(() => {
+    const loadImageHistory = async () => {
+      if (!user?.uid) {
+        setIsLoadingHistory(false);
+        initialLoadCompleteRef.current = true;
+        return;
+      }
+
+      try {
+        const imagesRef = doc(db, 'users', user.uid, 'images', 'history');
+        const imagesDoc = await getDoc(imagesRef);
+        
+        if (imagesDoc.exists()) {
+          const data = imagesDoc.data();
+          if (data.history && Array.isArray(data.history)) {
+            setHistory(data.history);
+          }
+        }
+      } catch (err) {
+        console.error('Error loading image history:', err);
+      } finally {
+        setIsLoadingHistory(false);
+        initialLoadCompleteRef.current = true;
+      }
+    };
+
+    loadImageHistory();
+  }, [user?.uid]);
+
+  // Save image history to Firestore when it changes
+  useEffect(() => {
+    const saveImageHistory = async () => {
+      // Only save if:
+      // 1. User is logged in
+      // 2. Initial load is complete (to avoid race conditions)
+      // 3. History was actually modified locally (not just loaded)
+      // 4. Not currently generating
+      if (!user?.uid || !initialLoadCompleteRef.current || !historyModifiedRef.current || isGenerating) {
+        return;
+      }
+
+      try {
+        const imagesRef = doc(db, 'users', user.uid, 'images', 'history');
+        await setDoc(imagesRef, {
+          history: history,
+          updatedAt: serverTimestamp(),
+        }, { merge: true });
+        console.log('Image history saved to Firestore');
+      } catch (err) {
+        console.error('Error saving image history:', err);
+      }
+    };
+
+    // Debounce save to avoid too many writes
+    const timeoutId = setTimeout(saveImageHistory, 500);
+    return () => clearTimeout(timeoutId);
+  }, [history, user?.uid, isGenerating]);
 
   const examplePrompts = [
-    {
-      emoji: '🏛️',
-      text: 'Traditional Sourashtra silk weaving scene with intricate patterns',
-      description: 'Classic heritage art'
-    },
-    {
-      emoji: '🎭',
-      text: 'Sourashtra traditional wedding ceremony with ornate decorations',
-      description: 'Cultural celebration'
-    },
-    {
-      emoji: '🎨',
-      text: 'Modern abstract art featuring Sourashtra script calligraphy',
-      description: 'Contemporary design'
-    },
-    {
-      emoji: '🌸',
-      text: 'Colorful Kolam floor pattern with Sourashtra cultural motifs',
-      description: 'Traditional floor art'
-    },
+    { text: 'Sourashtra silk weaving scene' },
+    { text: 'Traditional wedding ceremony' },
+    { text: 'Sourashtra script calligraphy' },
+    { text: 'Kolam floor pattern' },
+    { text: 'Temple architecture' },
+    { text: 'Classical dance performance' },
+    { text: 'Festival celebration' },
+    { text: 'Traditional jewelry design' },
   ];
+
+  // Upload image to Firebase Storage and return the download URL
+  const uploadImageToStorage = async (base64Data, mimeType) => {
+    if (!user?.uid) return null;
+    
+    const timestamp = Date.now();
+    const extension = mimeType.includes('png') ? 'png' : 'jpg';
+    // Use /users/{uid}/images/ path to match storage rules
+    const filename = `users/${user.uid}/images/${timestamp}.${extension}`;
+    const storageRef = ref(storage, filename);
+    
+    // Upload the base64 string
+    const dataUrl = `data:${mimeType};base64,${base64Data}`;
+    await uploadString(storageRef, dataUrl, 'data_url');
+    
+    // Get the download URL
+    const downloadUrl = await getDownloadURL(storageRef);
+    return downloadUrl;
+  };
 
   const generateImage = async (inputPrompt) => {
     const promptToUse = inputPrompt || prompt;
@@ -91,21 +165,41 @@ function ImagePage() {
       const data = await response.json();
       
       if (data.imageData) {
-        const imageUrl = `data:${data.imageData.mimeType};base64,${data.imageData.data}`;
+        const localImageUrl = `data:${data.imageData.mimeType};base64,${data.imageData.data}`;
+        
+        // Show the result immediately with local base64
         setResult({
-          url: imageUrl,
+          url: localImageUrl,
           prompt: promptToUse,
           enhancedPrompt: data.enhancedPrompt,
           text: data.text,
           settings: data.settings,
         });
         
-        setHistory(prev => [{
-          url: imageUrl,
-          prompt: promptToUse,
-          settings: data.settings,
-          timestamp: new Date().toISOString(),
-        }, ...prev].slice(0, 12));
+        // Upload to Storage in background (only for logged-in users)
+        if (user?.uid) {
+          try {
+            const storageUrl = await uploadImageToStorage(data.imageData.data, data.imageData.mimeType);
+            
+            if (storageUrl) {
+              // Mark history as modified locally so it gets saved
+              historyModifiedRef.current = true;
+              setHistory(prev => [{
+                url: storageUrl, // Use Storage URL for persistence
+                prompt: promptToUse,
+                settings: {
+                  aspectRatio: data.settings?.aspectRatio || aspectRatio,
+                  resolution: data.settings?.resolution || resolution,
+                  style: data.settings?.style || style,
+                },
+                timestamp: new Date().toISOString(),
+              }, ...prev].slice(0, 8));
+            }
+          } catch (uploadErr) {
+            console.error('Failed to upload image to Storage:', uploadErr);
+            // Still show the image, just won't be saved to history
+          }
+        }
       } else {
         setResult({
           prompt: promptToUse,
@@ -141,126 +235,115 @@ function ImagePage() {
   return (
     <div className="image-page">
       <div className="image-container">
-        <div className="image-header">
-          <h1>🎨 Image Generation</h1>
-          <p>Create beautiful images with Sourashtra cultural themes • Powered by Gemini</p>
+        {/* Top: Prompt Input */}
+        <div className="prompt-section">
+          <form className="prompt-form" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Describe the image you want to create..."
+              disabled={isGenerating}
+            />
+            <button 
+              type="submit" 
+              className="generate-btn"
+              disabled={!prompt.trim() || isGenerating}
+            >
+              {isGenerating ? (
+                <span className="loading-spinner"></span>
+              ) : (
+                <>
+                  <Sparkles size={16} />
+                  <span>Create</span>
+                </>
+              )}
+            </button>
+          </form>
         </div>
 
-        <div className="image-main">
-          <div className="generation-area">
-            <form className="prompt-form" onSubmit={handleSubmit}>
-              <div className="prompt-input-wrapper">
-                <textarea
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="Describe the image you want to create..."
-                  disabled={isGenerating}
-                  rows={3}
-                />
-                <button 
-                  type="submit" 
-                  className="generate-btn"
-                  disabled={!prompt.trim() || isGenerating}
-                >
-                  {isGenerating ? (
-                    <span className="loading-spinner"></span>
-                  ) : (
-                    <>
-                      <span>✨</span>
-                      <span>Generate</span>
-                    </>
-                  )}
-                </button>
+        {/* Main Content: Settings | Image | History */}
+        <div className="main-content">
+          {/* Left: Settings Panel */}
+          <aside className="settings-panel">
+            <div className="panel-header">
+              <Settings size={14} />
+              <span>Settings</span>
+            </div>
+            
+            <div className="setting-group">
+              <label>Resolution</label>
+              <div className="resolution-options">
+                {RESOLUTIONS.map(res => (
+                  <button
+                    key={res.value}
+                    className={`option-btn ${resolution === res.value ? 'active' : ''}`}
+                    onClick={() => setResolution(res.value)}
+                    type="button"
+                  >
+                    {res.label}
+                  </button>
+                ))}
               </div>
-            </form>
-
-            {/* Settings */}
-            <div className="generation-settings">
-              <button 
-                className="toggle-advanced"
-                onClick={() => setShowAdvanced(!showAdvanced)}
-              >
-                {showAdvanced ? '▼' : '▶'} Generation Settings
-              </button>
-
-              {showAdvanced && (
-                <div className="settings-panel">
-                  {/* Resolution */}
-                  <div className="setting-group">
-                    <label>Resolution</label>
-                    <div className="resolution-options">
-                      {RESOLUTIONS.map(res => (
-                        <button
-                          key={res.value}
-                          className={`resolution-btn ${resolution === res.value ? 'active' : ''}`}
-                          onClick={() => setResolution(res.value)}
-                          type="button"
-                        >
-                          <span className="res-label">{res.label}</span>
-                          <span className="res-desc">{res.desc}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Aspect Ratio */}
-                  <div className="setting-group">
-                    <label>Aspect Ratio</label>
-                    <div className="aspect-options">
-                      {ASPECT_RATIOS.map(ar => (
-                        <button
-                          key={ar.value}
-                          className={`aspect-btn ${aspectRatio === ar.value ? 'active' : ''}`}
-                          onClick={() => setAspectRatio(ar.value)}
-                          type="button"
-                          title={ar.label}
-                        >
-                          <span className="aspect-icon">{ar.icon}</span>
-                          <span className="aspect-value">{ar.value}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Style */}
-                  <div className="setting-group">
-                    <label>Style</label>
-                    <div className="style-options">
-                      {STYLES.map(s => (
-                        <button
-                          key={s.value}
-                          className={`style-btn ${style === s.value ? 'active' : ''}`}
-                          onClick={() => setStyle(s.value)}
-                          type="button"
-                        >
-                          <span className="style-icon">{s.icon}</span>
-                          <span className="style-label">{s.label}</span>
-                          <span className="style-desc">{s.desc}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
 
-            {/* Example Prompts */}
-            {!result && !isGenerating && (
-              <div className="example-prompts">
-                <h3>Try these examples:</h3>
-                <div className="examples-grid">
+            <div className="setting-group">
+              <label>Aspect Ratio</label>
+              <div className="aspect-options">
+                {ASPECT_RATIOS.map(ar => (
+                  <button
+                    key={ar.value}
+                    className={`option-btn aspect-btn ${aspectRatio === ar.value ? 'active' : ''}`}
+                    onClick={() => setAspectRatio(ar.value)}
+                    type="button"
+                    title={ar.label}
+                  >
+                    {ar.icon}
+                    <span>{ar.value}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="setting-group">
+              <label>Style</label>
+              <div className="style-options">
+                {STYLES.map(s => (
+                  <button
+                    key={s.value}
+                    className={`option-btn style-btn ${style === s.value ? 'active' : ''}`}
+                    onClick={() => setStyle(s.value)}
+                    type="button"
+                  >
+                    {s.icon}
+                    <span>{s.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </aside>
+
+          {/* Center: Image Viewer */}
+          <div className="image-viewer">
+            {/* Default State - Examples */}
+            {!result && !isGenerating && !error && (
+              <div className="empty-state">
+                <div className="empty-icon">
+                  <Image size={32} />
+                </div>
+                <p>Enter a prompt to create an image</p>
+
+                <div className="example-chips">
                   {examplePrompts.map((example, index) => (
                     <button
                       key={index}
-                      className="example-btn"
+                      className="example-chip"
                       onClick={() => {
                         setPrompt(example.text);
                         generateImage(example.text);
                       }}
                     >
-                      <span className="example-emoji">{example.emoji}</span>
-                      <span className="example-text">{example.text}</span>
-                      <span className="example-desc">{example.description}</span>
+                      {example.text}
                     </button>
                   ))}
                 </div>
@@ -273,7 +356,7 @@ function ImagePage() {
                 <div className="generating-animation">
                   <div className="gen-orb">
                     <img 
-                      src="https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar.png?alt=media&token=9284aeb3-8cbd-4cc1-bed3-35d9f889283a" 
+                      src="https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d" 
                       alt="Generating"
                       className="gen-logo"
                     />
@@ -284,15 +367,14 @@ function ImagePage() {
                     <div className="gen-ring"></div>
                   </div>
                 </div>
-                <p className="generating-text">Creating your {resolution} image...</p>
-                <p className="generating-hint">This may take a moment for higher resolutions</p>
+                <p className="generating-text">Creating your image...</p>
               </div>
             )}
 
             {/* Error State */}
             {error && (
               <div className="error-state">
-                <span className="error-icon">⚠️</span>
+                <AlertTriangle size={24} />
                 <p>{error}</p>
                 <button onClick={() => setError(null)} className="retry-btn">
                   Try Again
@@ -302,121 +384,68 @@ function ImagePage() {
 
             {/* Result */}
             {result && !isGenerating && (
-              <div className="generated-result">
+              <div className="result-container">
                 {result.url ? (
                   <>
                     <div className="result-image">
                       <img src={result.url} alt={result.prompt} />
-                      <div className="result-badge">
-                        {result.settings?.resolution || resolution}
-                      </div>
+                      <div className="result-badge">{result.settings?.resolution || resolution}</div>
                     </div>
-                    <div className="result-info">
-                      <p className="result-prompt">"{result.prompt}"</p>
-                      {result.enhancedPrompt && result.enhancedPrompt !== result.prompt && (
-                        <p className="enhanced-prompt">
-                          <strong>Enhanced:</strong> {result.enhancedPrompt}
-                        </p>
-                      )}
-                      <div className="result-actions">
-                        <button className="action-btn download-btn" onClick={downloadImage}>
-                          <span>⬇️</span>
-                          <span>Download {resolution}</span>
-                        </button>
-                        <button 
-                          className="action-btn new-btn" 
-                          onClick={() => {
-                            setResult(null);
-                            setPrompt('');
-                          }}
-                        >
-                          <span>✨</span>
-                          <span>New Image</span>
-                        </button>
-                      </div>
+                    <div className="result-actions">
+                      <button className="action-btn download-btn" onClick={downloadImage}>
+                        <Download size={14} />
+                        Download
+                      </button>
+                      <button 
+                        className="action-btn new-btn" 
+                        onClick={() => { setResult(null); setPrompt(''); }}
+                      >
+                        <Sparkles size={14} />
+                        New
+                      </button>
                     </div>
                   </>
                 ) : (
-                  <div className="result-card">
-                    <div className="coming-soon-notice">
-                      <span className="notice-icon">🎨</span>
-                      <h4>Image Generation Processing</h4>
-                      <p>{result.text || 'Your image is being generated...'}</p>
-                      {result.enhancedPrompt && (
-                        <div className="copy-prompt">
-                          <p><strong>Enhanced prompt:</strong> {result.enhancedPrompt}</p>
-                          <button 
-                            onClick={() => navigator.clipboard.writeText(result.enhancedPrompt)}
-                            className="copy-btn"
-                          >
-                            📋 Copy Prompt
-                          </button>
-                        </div>
-                      )}
-                    </div>
+                  <div className="processing-state">
+                    <Palette size={24} />
+                    <p>{result.text || 'Processing...'}</p>
                     <button 
                       className="action-btn new-btn" 
-                      onClick={() => {
-                        setResult(null);
-                        setPrompt('');
-                      }}
+                      onClick={() => { setResult(null); setPrompt(''); }}
                     >
-                      <span>✨</span>
-                      <span>Try Again</span>
+                      Try Again
                     </button>
                   </div>
                 )}
               </div>
             )}
           </div>
-
-          {/* History Sidebar */}
-          {history.length > 0 && (
-            <aside className="history-sidebar">
-              <h3>Recent Creations</h3>
-              <div className="history-grid">
-                {history.map((item, index) => (
-                  <button
-                    key={index}
-                    className="history-item"
-                    onClick={() => setResult({
-                      url: item.url,
-                      prompt: item.prompt,
-                      settings: item.settings,
-                    })}
-                  >
-                    <img src={item.url} alt={item.prompt} />
-                    <span className="history-res">{item.settings?.resolution || '1K'}</span>
-                  </button>
-                ))}
-              </div>
-              {!user && (
-                <p className="history-note">
-                  Sign in to save your images permanently
-                </p>
-              )}
-            </aside>
-          )}
         </div>
 
-        {/* Features */}
-        <div className="image-features">
-          <div className="feature-item">
-            <span className="feature-icon">🎭</span>
-            <h4>Cultural Themes</h4>
-            <p>Generate images with authentic Sourashtra cultural elements</p>
+        {/* Recent Creations - Below */}
+        {history.length > 0 && (
+          <div className="history-section">
+            <div className="history-header">
+              <span>Recent Creations</span>
+            </div>
+            <div className="history-grid">
+              {history.map((item, index) => (
+                <button
+                  key={index}
+                  className="history-item"
+                  onClick={() => setResult({
+                    url: item.url,
+                    prompt: item.prompt,
+                    settings: item.settings,
+                  })}
+                >
+                  <img src={item.url} alt={item.prompt} />
+                  <span className="history-res">{item.settings?.resolution || '1K'}</span>
+                </button>
+              ))}
+            </div>
           </div>
-          <div className="feature-item">
-            <span className="feature-icon">4️⃣K</span>
-            <h4>Up to 4K Resolution</h4>
-            <p>Create ultra HD images with stunning detail</p>
-          </div>
-          <div className="feature-item">
-            <span className="feature-icon">🆓</span>
-            <h4>Completely Free</h4>
-            <p>Generate unlimited images at no cost</p>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

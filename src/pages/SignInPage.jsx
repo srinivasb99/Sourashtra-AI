@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './AuthPages.css';
@@ -8,8 +8,15 @@ function SignInPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signInWithGoogle, signInWithEmail } = useAuth();
+  const { user, signInWithGoogle, signInWithEmail } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/chat');
+    }
+  }, [user, navigate]);
 
   const handleEmailSignIn = async (e) => {
     e.preventDefault();
@@ -18,7 +25,7 @@ function SignInPage() {
 
     try {
       await signInWithEmail(email, password);
-      navigate('/');
+      navigate('/chat');
     } catch (err) {
       setError(getErrorMessage(err.code));
     } finally {
@@ -32,7 +39,7 @@ function SignInPage() {
 
     try {
       await signInWithGoogle();
-      navigate('/');
+      navigate('/chat');
     } catch (err) {
       setError(getErrorMessage(err.code));
     } finally {
@@ -64,7 +71,7 @@ function SignInPage() {
       <div className="auth-container">
         <div className="auth-header">
           <img 
-            src="https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar.png?alt=media&token=9284aeb3-8cbd-4cc1-bed3-35d9f889283a" 
+            src="https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d" 
             alt="Sourashtra AI" 
             className="auth-logo"
           />
@@ -117,6 +124,9 @@ function SignInPage() {
               required
               disabled={loading}
             />
+          <div className="forgot-password-link">
+            <Link to="/forgot-password">Forgot password?</Link>
+            </div>
           </div>
 
           <button type="submit" className="auth-submit-btn" disabled={loading}>

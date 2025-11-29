@@ -4,21 +4,24 @@ import './HowItWorks.css'
 const steps = [
   {
     number: "01",
-    title: "Open the App",
+    title: "Click to Start",
     description: "No signup required. Just click \"Start Conversation\" and you're ready to begin.",
-    visual: "app"
+    visual: "click",
+    emoji: "🖱️"
   },
   {
     number: "02",
     title: "Speak Naturally",
     description: "Talk in Sourashtra or English. Our AI understands both and responds in Sourashtra.",
-    visual: "mic"
+    visual: "mic",
+    emoji: "🎤"
   },
   {
     number: "03",
     title: "Learn & Connect",
     description: "Get instant responses, learn new words, and deepen your connection to your heritage.",
-    visual: "connect"
+    visual: "connect",
+    emoji: "💬"
   }
 ]
 
@@ -49,7 +52,7 @@ function HowItWorks() {
         <div className={`section-header center ${isVisible ? 'visible' : ''}`}>
           <span className="section-tag">Simple Process</span>
           <h2 className="section-title">
-            Start Speaking in<br />
+            Start Learning in<br />
             <span className="highlight">Three Easy Steps</span>
           </h2>
         </div>
@@ -67,20 +70,14 @@ function HowItWorks() {
                   <p>{step.description}</p>
                 </div>
                 <div className="step-visual">
-                  {step.visual === 'app' && (
-                    <div className="phone-mockup">
-                      <div className="phone-screen">
-                        <div className="app-ui">
-                          <div className="app-logo-small">ஃ</div>
-                          <div className="app-text">Sourashtra AI</div>
-                          <div className="app-button">Start</div>
-                        </div>
-                      </div>
+                  {step.emoji && <div className="step-emoji">{step.emoji}</div>}
+                  {step.visual === 'click' && (
+                    <div className="click-visual">
+                      <span>✨</span>
                     </div>
                   )}
                   {step.visual === 'mic' && (
                     <div className="mic-animation">
-                      <div className="mic-icon">🎤</div>
                       <div className="sound-waves">
                         <span></span>
                         <span></span>
@@ -90,7 +87,6 @@ function HowItWorks() {
                   )}
                   {step.visual === 'connect' && (
                     <div className="connection-visual">
-                      <div className="connect-icon">💬</div>
                       <div className="connect-hearts">
                         <span>❤️</span>
                       </div>
@@ -115,4 +111,3 @@ function HowItWorks() {
 }
 
 export default HowItWorks
-

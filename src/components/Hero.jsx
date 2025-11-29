@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, Mic, MessageCircle } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
 import './Hero.css'
 
 function Hero() {
   const [isOrbActive, setIsOrbActive] = useState(false)
   const [showBubbles, setShowBubbles] = useState(false)
+  const { user } = useAuth()
 
   useEffect(() => {
     const timer1 = setTimeout(() => setIsOrbActive(true), 500)
@@ -18,35 +22,36 @@ function Hero() {
     <section className="hero">
       <div className="hero-content">
         <div className="hero-badge">
-          <span className="badge-icon">🎙️</span>
-          <span>Real-Time Voice AI</span>
+          <Mic size={20} className="badge-icon" />
+          <span>Real-Time AI</span>
         </div>
         
         <h1 className="hero-title">
-          <span className="title-line">Speak Your</span>
+          <span className="title-line">Learn Your</span>
           <span className="title-highlight">Heritage</span>
         </h1>
         
         <p className="hero-subtitle">
-          Experience the world's first AI that truly understands and speaks Sourashtra. 
-          Connect with your roots through natural conversation.
+          Sourashtra, brought to life with AI.
+          <br />
+          Speak naturally. Learn easily. Share your heritage proudly.
         </p>
         
         <div className="hero-actions">
-          <button className="btn-primary" onClick={() => setIsOrbActive(!isOrbActive)}>
-            <span className="btn-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                <line x1="12" y1="19" x2="12" y2="23"/>
-                <line x1="8" y1="23" x2="16" y2="23"/>
-              </svg>
-            </span>
-            <span>Start Conversation</span>
-          </button>
+          {user ? (
+            <Link to="/chat" className="btn-primary">
+              <MessageCircle size={20} />
+              <span>Go to Chat</span>
+            </Link>
+          ) : (
+            <Link to="/signup" className="btn-primary">
+              <span>Get Started</span>
+              <ArrowRight size={20} />
+            </Link>
+          )}
           <a href="#how-it-works" className="btn-secondary">
             <span>See How It Works</span>
-            <span className="arrow">→</span>
+            <ArrowRight size={18} />
           </a>
         </div>
         
@@ -70,7 +75,13 @@ function Hero() {
 
       <div className="hero-visual">
         <div className={`voice-orb ${isOrbActive ? 'active' : ''}`}>
-          <div className="orb-core"></div>
+          <div className="orb-core">
+            <img 
+              src="https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d" 
+              alt="Sourashtra AI"
+              className="orb-logo"
+            />
+          </div>
           <div className="orb-ring ring-1"></div>
           <div className="orb-ring ring-2"></div>
           <div className="orb-ring ring-3"></div>
@@ -84,12 +95,10 @@ function Hero() {
         
         <div className={`conversation-bubbles ${showBubbles ? 'visible' : ''}`}>
           <div className="bubble bubble-user">
-            <span className="bubble-text">நமஸ்கரம் !</span>
-            <span className="bubble-translation">Namaskaram!</span>
+            <span className="bubble-text">Jhukku dhannu!</span>
           </div>
           <div className="bubble bubble-ai">
-            <span className="bubble-text">அஸ்கு தின்னங்கோ நமஸ்கரம்!</span>
-            <span className="bubble-translation">Asku thinnango namaskaram!</span>
+            <span className="bubble-text">Askthinengo namaskar</span>
           </div>
         </div>
       </div>
@@ -105,4 +114,3 @@ function Hero() {
 }
 
 export default Hero
-

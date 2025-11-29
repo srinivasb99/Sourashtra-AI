@@ -1,14 +1,19 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLiveVoice } from '../hooks/useLiveVoice';
 import { useAuth } from '../context/AuthContext';
+import { Mic, MicOff, Plug, X, Loader2 } from 'lucide-react';
 import './VoicePage.css';
+
+const LOGO_URL = "https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d";
 
 function VoicePage() {
   const { user } = useAuth();
   const {
     isConnected,
+    isConnecting,
     isListening,
     isSpeaking,
+    isProcessing,
     transcript,
     error,
     connect,
@@ -20,6 +25,14 @@ function VoicePage() {
   const [volume, setVolume] = useState(0);
   const analyserRef = useRef(null);
   const animationRef = useRef(null);
+  const transcriptEndRef = useRef(null);
+
+  // Auto-scroll transcript
+  useEffect(() => {
+    if (transcriptEndRef.current) {
+      transcriptEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [transcript]);
 
   // Volume visualization when listening
   useEffect(() => {
@@ -42,38 +55,88 @@ function VoicePage() {
           }
         };
         updateVolume();
+      }).catch(() => {
+        // Microphone access handled by speech recognition
       });
+    }
+
+    if (!isListening && analyserRef.current) {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+      analyserRef.current.stream.getTracks().forEach(t => t.stop());
+      analyserRef.current.audioContext.close();
+      analyserRef.current = null;
+      setVolume(0);
     }
 
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
+    };
+  }, [isListening]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
       if (analyserRef.current) {
         analyserRef.current.stream.getTracks().forEach(t => t.stop());
         analyserRef.current.audioContext.close();
-        analyserRef.current = null;
       }
     };
-  }, [isListening]);
+  }, []);
+
+  const getStatusText = () => {
+    if (isConnecting) return 'Connecting...';
+    if (!isConnected) return 'Not connected';
+    if (isProcessing) return 'Thinking...';
+    if (isSpeaking) return 'AI is speaking...';
+    if (isListening) return 'Listening...';
+    return 'Ready to listen';
+  };
+
+  const getStatusClass = () => {
+    if (!isConnected) return 'status-disconnected';
+    if (isProcessing) return 'status-processing';
+    if (isSpeaking) return 'status-speaking';
+    if (isListening) return 'status-listening';
+    return 'status-ready';
+  };
+
+  const getOrbClass = () => {
+    let classes = 'voice-orb-container';
+    if (isListening) classes += ' listening';
+    if (isSpeaking) classes += ' speaking';
+    if (isProcessing) classes += ' processing';
+    return classes;
+  };
 
   return (
     <div className="voice-page">
       <div className="voice-container">
         <div className="voice-header">
-          <h1>🎙️ Live Voice Mode</h1>
+          <h1>Live Voice Mode</h1>
           <p>Have a real-time conversation in Sourashtra</p>
         </div>
 
         <div className="voice-main">
           {/* Voice Orb */}
-          <div className={`voice-orb-container ${isListening ? 'listening' : ''} ${isSpeaking ? 'speaking' : ''}`}>
+          <div className={getOrbClass()}>
             <div 
               className="voice-orb"
               style={{ '--volume': volume }}
             >
               <div className="orb-core">
-                <span className="orb-symbol">ஃ</span>
+                {isProcessing ? (
+                  <Loader2 className="orb-loader" size={40} />
+                ) : (
+                  <img 
+                    src={LOGO_URL} 
+                    alt="Sourashtra AI" 
+                    className="orb-logo"
+                  />
+                )}
               </div>
               <div className="orb-rings">
                 <div className="ring ring-1"></div>
@@ -88,35 +151,36 @@ function VoicePage() {
 
           {/* Status */}
           <div className="voice-status">
-            {!isConnected ? (
-              <span className="status-disconnected">Not connected</span>
-            ) : isListening ? (
-              <span className="status-listening">Listening...</span>
-            ) : isSpeaking ? (
-              <span className="status-speaking">AI is speaking...</span>
-            ) : (
-              <span className="status-ready">Ready to listen</span>
-            )}
+            <span className={getStatusClass()}>{getStatusText()}</span>
           </div>
 
           {/* Controls */}
           <div className="voice-controls">
             {!isConnected ? (
-              <button className="voice-btn connect-btn" onClick={connect}>
-                <span className="btn-icon">🔌</span>
-                <span>Connect</span>
+              <button 
+                className="voice-btn connect-btn" 
+                onClick={connect}
+                disabled={isConnecting}
+              >
+                {isConnecting ? <Loader2 className="btn-spinner" size={20} /> : <Plug size={20} />}
+                <span>{isConnecting ? 'Connecting...' : 'Connect'}</span>
               </button>
             ) : (
               <>
                 <button 
                   className={`voice-btn mic-btn ${isListening ? 'active' : ''}`}
                   onClick={isListening ? stopListening : startListening}
+                  disabled={isProcessing || isSpeaking}
                 >
-                  <span className="btn-icon">{isListening ? '⏹️' : '🎤'}</span>
+                  {isListening ? <MicOff size={20} /> : <Mic size={20} />}
                   <span>{isListening ? 'Stop' : 'Start'}</span>
                 </button>
-                <button className="voice-btn disconnect-btn" onClick={disconnect}>
-                  <span className="btn-icon">✖️</span>
+                <button 
+                  className="voice-btn disconnect-btn" 
+                  onClick={disconnect}
+                  disabled={isProcessing}
+                >
+                  <X size={20} />
                   <span>Disconnect</span>
                 </button>
               </>
@@ -142,30 +206,8 @@ function VoicePage() {
                     <span className="transcript-text">{item.text}</span>
                   </div>
                 ))}
+                <div ref={transcriptEndRef} />
               </div>
-            </div>
-          )}
-        </div>
-
-        {/* Info */}
-        <div className="voice-info">
-          <div className="info-card">
-            <h4>💡 Tips for best experience</h4>
-            <ul>
-              <li>Use headphones to prevent echo</li>
-              <li>Speak clearly and at a normal pace</li>
-              <li>You can speak in Sourashtra or English</li>
-              <li>The AI will respond primarily in Sourashtra</li>
-            </ul>
-          </div>
-          <div className="info-card">
-            <h4>🔒 Secure & Private</h4>
-            <p>All voice data is processed securely through our backend servers. No data is stored unless you're signed in and choose to save.</p>
-          </div>
-          {!user && (
-            <div className="info-card">
-              <h4>👤 Sign in to save recordings</h4>
-              <p>Sign in with Google to save your voice conversations for later review.</p>
             </div>
           )}
         </div>

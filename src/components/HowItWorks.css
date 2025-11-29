@@ -4,7 +4,7 @@
 
 .how-it-works {
   padding: var(--space-4xl) 0;
-  background: var(--white);
+  background: #F1F7F7;
   overflow: hidden;
 }
 
@@ -29,14 +29,19 @@
 }
 
 .step {
-  background: var(--gray-100);
+  background: var(--white);
   border-radius: var(--radius-xl);
   padding: var(--space-xl);
   width: 280px;
+  min-height: 320px;
   position: relative;
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.6s ease;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-md);
 }
 
 .step.visible {
@@ -46,8 +51,9 @@
 }
 
 .step:hover {
-  background: var(--mint-light);
   transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--teal-primary);
 }
 
 .step-number {
@@ -74,9 +80,17 @@
 
 /* Step Visual */
 .step-visual {
-  margin-top: var(--space-xl);
+  margin-top: auto;
+  padding-top: var(--space-lg);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.step-emoji {
+  font-size: 3rem;
+  line-height: 1;
 }
 
 /* Phone Mockup */
@@ -124,17 +138,23 @@
   font-weight: 600;
 }
 
+/* Click Visual */
+.click-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.click-visual span {
+  font-size: 1.5rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
 /* Mic Animation */
 .mic-animation {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-md);
-}
-
-.mic-icon {
-  font-size: 2.5rem;
-  animation: pulse 2s ease-in-out infinite;
 }
 
 .sound-waves {
@@ -160,15 +180,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-sm);
-}
-
-.connect-icon {
-  font-size: 2.5rem;
 }
 
 .connect-hearts span {
-  font-size: 1rem;
+  font-size: 1.5rem;
   animation: float 2s ease-in-out infinite;
 }
 

@@ -12,6 +12,8 @@ import VoicePage from './pages/VoicePage';
 import ImagePage from './pages/ImagePage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import SettingsPage from './pages/SettingsPage';
 import './App.css';
 
 // Landing Page Component
@@ -43,6 +45,8 @@ function App() {
               <Route path="/image" element={<ImagePage />} />
               <Route path="/signin" element={<SignInPage />} />
               <Route path="/signup" element={<SignUpPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
             </Routes>
           </main>
         </div>

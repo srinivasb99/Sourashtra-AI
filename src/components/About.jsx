@@ -33,20 +33,24 @@ function About() {
               <span className="highlight">2000-Year Legacy</span>
             </h2>
             <p className="about-text">
-              Sourashtra is more than a language—it's a living connection to our ancestors, 
-              our traditions, and our identity. With fewer young people learning the language, 
-              we're at risk of losing this precious heritage.
+              Sourashtra is more than a language.<br />
+              It holds our stories, our identity, and our roots.
             </p>
             <p className="about-text">
-              Sourashtra AI is our answer. Built with cutting-edge technology and deep cultural 
-              understanding, it provides an accessible, engaging way for anyone to learn, 
-              practice, and preserve our beautiful language.
+              But fewer young people grow up speaking it today.
+            </p>
+            <p className="about-text">
+              Sourashtra AI is our way of keeping the language alive.<br />
+              <strong>Accessible. Simple. Cultural.</strong>
+            </p>
+            <p className="about-text">
+              A place where anyone can learn, practice, and pass our heritage forward.
             </p>
             <div className="about-quote">
               <blockquote>
-                "அவ்ரே பாஷை அவ்ரே பெருமை"
+                "Avre bhashai avre perumai"
               </blockquote>
-              <cite>— Our language is our pride</cite>
+              <cite>— Our language is our pride.</cite>
             </div>
           </div>
 
@@ -54,15 +58,21 @@ function About() {
             <div className="heritage-symbol">
               <div className="symbol-outer">
                 <div className="symbol-ring"></div>
-                <div className="symbol-core">ஃ</div>
+                <div className="symbol-core">
+                  <img 
+                    src="https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d" 
+                    alt="Sourashtra AI Logo"
+                    className="symbol-logo"
+                  />
+                </div>
                 <div className="symbol-people">
                   {[...Array(8)].map((_, i) => (
                     <span key={i} style={{ '--i': i }}></span>
                   ))}
                 </div>
-                <div className="symbol-text-ring">
-                  <span className="ring-text">SOURASHTRA ASSOCIATION</span>
-                </div>
+              </div>
+              <div className="symbol-text-below">
+                <span className="ring-text">SOURASHTRA ASSOCIATION</span>
               </div>
             </div>
           </div>
@@ -73,4 +83,3 @@ function About() {
 }
 
 export default About
-
