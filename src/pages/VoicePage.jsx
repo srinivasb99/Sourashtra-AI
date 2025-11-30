@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLiveVoice } from '../hooks/useLiveVoice';
 import { useAuth } from '../context/AuthContext';
-import { Mic, MicOff, Plug, X, Loader2 } from 'lucide-react';
+import { Mic, MicOff, Plug, X, Loader2, ArrowUp } from 'lucide-react';
 import './VoicePage.css';
 
 const LOGO_URL = "https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d";
@@ -20,7 +20,10 @@ function VoicePage() {
     disconnect,
     startListening,
     stopListening,
+    sendText,
   } = useLiveVoice();
+  
+  const [textInput, setTextInput] = useState('');
   
   const [volume, setVolume] = useState(0);
   const analyserRef = useRef(null);
@@ -112,89 +115,122 @@ function VoicePage() {
     return classes;
   };
 
+  const handleTextSubmit = (e) => {
+    e.preventDefault();
+    if (textInput.trim() && isConnected && !isProcessing) {
+      sendText(textInput.trim());
+      setTextInput('');
+    }
+  };
+
   return (
     <div className="voice-page">
-      <div className="voice-container">
-        <div className="voice-header">
-          <h1>Live Voice Mode</h1>
-          <p>Have a real-time conversation in Sourashtra</p>
-        </div>
+      <div className="voice-layout">
+        {/* Main Voice Panel */}
+        <div className="voice-panel">
+          <div className="voice-header">
+            <h1>Live Voice Mode</h1>
+            <p>Have a real-time conversation in Sourashtra</p>
+          </div>
 
-        <div className="voice-main">
-          {/* Voice Orb */}
-          <div className={getOrbClass()}>
-            <div 
-              className="voice-orb"
-              style={{ '--volume': volume }}
-            >
-              <div className="orb-core">
-                {isProcessing ? (
-                  <Loader2 className="orb-loader" size={40} />
-                ) : (
+          <div className="voice-main">
+            {/* Voice Orb */}
+            <div className={getOrbClass()}>
+              <div 
+                className="voice-orb"
+                style={{ '--volume': volume }}
+              >
+                {isListening && (
+                  <div 
+                    className="volume-indicator" 
+                    style={{ '--scale': 1 + volume * 0.5 }}
+                  ></div>
+                )}
+                <div className="orb-rings">
+                  <div className="ring ring-1"></div>
+                  <div className="ring ring-2"></div>
+                  <div className="ring ring-3"></div>
+                </div>
+                <div className="orb-core">
+                  {isProcessing && <Loader2 className="orb-loader" size={32} />}
                   <img 
                     src={LOGO_URL} 
                     alt="Sourashtra AI" 
-                    className="orb-logo"
+                    className={`orb-logo ${isProcessing ? 'processing' : ''}`}
                   />
-                )}
+                </div>
               </div>
-              <div className="orb-rings">
-                <div className="ring ring-1"></div>
-                <div className="ring ring-2"></div>
-                <div className="ring ring-3"></div>
-              </div>
-              {isListening && (
-                <div className="volume-indicator" style={{ transform: `scale(${1 + volume * 0.5})` }}></div>
+            </div>
+
+            {/* Status */}
+            <div className="voice-status">
+              <span className={getStatusClass()}>{getStatusText()}</span>
+            </div>
+
+            {/* Controls */}
+            <div className="voice-controls">
+              {!isConnected ? (
+                <button 
+                  className="voice-btn connect-btn" 
+                  onClick={connect}
+                  disabled={isConnecting}
+                >
+                  {isConnecting ? <Loader2 className="btn-spinner" size={20} /> : <Plug size={20} />}
+                  <span>{isConnecting ? 'Connecting...' : 'Connect'}</span>
+                </button>
+              ) : (
+                <>
+                  <button 
+                    className={`voice-btn mic-btn ${isListening ? 'active' : ''}`}
+                    onClick={isListening ? stopListening : startListening}
+                    disabled={isProcessing || isSpeaking}
+                  >
+                    {isListening ? <MicOff size={20} /> : <Mic size={20} />}
+                    <span>{isListening ? 'Stop' : 'Start'}</span>
+                  </button>
+                  <button 
+                    className="voice-btn disconnect-btn" 
+                    onClick={disconnect}
+                    disabled={isProcessing}
+                  >
+                    <X size={20} />
+                    <span>Disconnect</span>
+                  </button>
+                </>
               )}
             </div>
-          </div>
 
-          {/* Status */}
-          <div className="voice-status">
-            <span className={getStatusClass()}>{getStatusText()}</span>
-          </div>
-
-          {/* Controls */}
-          <div className="voice-controls">
-            {!isConnected ? (
+            {/* Text Input */}
+            {isConnected && (
+              <form className="voice-text-input" onSubmit={handleTextSubmit}>
+                <input
+                  type="text"
+                  value={textInput}
+                  onChange={(e) => setTextInput(e.target.value)}
+                  placeholder="Or type a message..."
+                  disabled={!isConnected || isProcessing}
+                />
               <button 
-                className="voice-btn connect-btn" 
-                onClick={connect}
-                disabled={isConnecting}
+                type="submit" 
+                className="send-btn"
+                disabled={!textInput.trim() || isProcessing}
               >
-                {isConnecting ? <Loader2 className="btn-spinner" size={20} /> : <Plug size={20} />}
-                <span>{isConnecting ? 'Connecting...' : 'Connect'}</span>
+                <ArrowUp size={18} />
               </button>
-            ) : (
-              <>
-                <button 
-                  className={`voice-btn mic-btn ${isListening ? 'active' : ''}`}
-                  onClick={isListening ? stopListening : startListening}
-                  disabled={isProcessing || isSpeaking}
-                >
-                  {isListening ? <MicOff size={20} /> : <Mic size={20} />}
-                  <span>{isListening ? 'Stop' : 'Start'}</span>
-                </button>
-                <button 
-                  className="voice-btn disconnect-btn" 
-                  onClick={disconnect}
-                  disabled={isProcessing}
-                >
-                  <X size={20} />
-                  <span>Disconnect</span>
-                </button>
-              </>
+              </form>
+            )}
+
+            {error && (
+              <div className="voice-error">
+                <p>{error}</p>
+              </div>
             )}
           </div>
+        </div>
 
-          {error && (
-            <div className="voice-error">
-              <p>{error}</p>
-            </div>
-          )}
-
-          {/* Transcript */}
-          {transcript.length > 0 && (
+        {/* Transcript Panel - Side */}
+        {transcript.length > 0 && (
+          <div className="voice-transcript-panel">
             <div className="voice-transcript">
               <h3>Conversation</h3>
               <div className="transcript-list">
@@ -209,8 +245,8 @@ function VoicePage() {
                 <div ref={transcriptEndRef} />
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
