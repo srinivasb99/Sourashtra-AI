@@ -313,3 +313,35 @@
   }
 }
 
+/* ============================================
+   Dark Mode
+   ============================================ */
+
+[data-theme="dark"] .how-it-works {
+  background: #181818;
+}
+
+[data-theme="dark"] .step {
+  background: #212121;
+  border-color: #303030;
+}
+
+[data-theme="dark"] .step:hover {
+  border-color: var(--teal-primary);
+}
+
+[data-theme="dark"] .step-content h3 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .step-content p {
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .step-connector {
+  color: #303030;
+}
+
+[data-theme="dark"] .phone-mockup {
+  background: #212121;
+}

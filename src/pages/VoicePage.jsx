@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLiveVoice } from '../hooks/useLiveVoice';
 import { useAuth } from '../context/AuthContext';
-import { Mic, MicOff, Plug, X, Loader2, ArrowUp } from 'lucide-react';
+import { Mic, MicOff, Plug, X, Loader2, ArrowUp, Info } from 'lucide-react';
 import './VoicePage.css';
 
 const LOGO_URL = "https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d";
@@ -26,7 +26,6 @@ function VoicePage() {
   const [textInput, setTextInput] = useState('');
   
   const [volume, setVolume] = useState(0);
-  const analyserRef = useRef(null);
   const animationRef = useRef(null);
   const transcriptEndRef = useRef(null);
 
@@ -38,38 +37,25 @@ function VoicePage() {
   }, [transcript]);
 
   // Volume visualization when listening
+  // Note: We use a simple pulsing animation instead of actual volume analysis
+  // to avoid creating a second microphone stream that conflicts with useLiveVoice
   useEffect(() => {
-    if (isListening && !analyserRef.current) {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const analyser = audioContext.createAnalyser();
-        const source = audioContext.createMediaStreamSource(stream);
-        source.connect(analyser);
-        analyser.fftSize = 256;
-        analyserRef.current = { analyser, audioContext, stream };
-
-        const updateVolume = () => {
-          if (analyserRef.current) {
-            const dataArray = new Uint8Array(analyser.frequencyBinCount);
-            analyser.getByteFrequencyData(dataArray);
-            const avg = dataArray.reduce((a, b) => a + b) / dataArray.length;
-            setVolume(avg / 255);
-            animationRef.current = requestAnimationFrame(updateVolume);
-          }
-        };
-        updateVolume();
-      }).catch(() => {
-        // Microphone access handled by speech recognition
-      });
-    }
-
-    if (!isListening && analyserRef.current) {
+    if (isListening) {
+      // Simulate volume with a gentle pulse effect
+      let phase = 0;
+      const updateVolume = () => {
+        phase += 0.1;
+        // Create a smooth sine wave pulse between 0.2 and 0.6
+        const simulatedVolume = 0.4 + Math.sin(phase) * 0.2;
+        setVolume(simulatedVolume);
+        animationRef.current = requestAnimationFrame(updateVolume);
+      };
+      updateVolume();
+    } else {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
       }
-      analyserRef.current.stream.getTracks().forEach(t => t.stop());
-      analyserRef.current.audioContext.close();
-      analyserRef.current = null;
       setVolume(0);
     }
 
@@ -83,9 +69,8 @@ function VoicePage() {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (analyserRef.current) {
-        analyserRef.current.stream.getTracks().forEach(t => t.stop());
-        analyserRef.current.audioContext.close();
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
     };
   }, []);
@@ -129,8 +114,13 @@ function VoicePage() {
         {/* Main Voice Panel */}
         <div className="voice-panel">
           <div className="voice-header">
+            <span className="beta-tag">BETA</span>
             <h1>Live Voice Mode</h1>
             <p>Have a real-time conversation in Sourashtra</p>
+            <div className="beta-disclaimer">
+              <Info size={14} />
+              <span>The AI is still learning Sourashtra and may occasionally provide incorrect responses. It's actively improving!</span>
+            </div>
           </div>
 
           <div className="voice-main">

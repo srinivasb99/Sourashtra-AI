@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
@@ -32,6 +33,7 @@ function LandingPage() {
 
 function App() {
   return (
+    <ThemeProvider>
     <AuthProvider>
       <Router>
         <div className="app loaded">
@@ -52,6 +54,7 @@ function App() {
         </div>
       </Router>
     </AuthProvider>
+    </ThemeProvider>
   );
 }
 

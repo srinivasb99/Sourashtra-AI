@@ -7,7 +7,7 @@ import API_URL from '../config/api';
 import { 
   Image, Square, Monitor, Smartphone, Camera, Film, 
   Sparkles, Palette, Theater, Download, AlertTriangle,
-  Copy, Landmark, Flower2, Settings
+  Copy, Landmark, Flower2, Settings, Plus, X, ArrowUp
 } from 'lucide-react';
 import './ImagePage.css';
 
@@ -43,10 +43,12 @@ function ImagePage() {
   const [error, setError] = useState(null);
   const [history, setHistory] = useState([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+  const [referenceImages, setReferenceImages] = useState([]);
   
   // Track if history has been modified locally (not just loaded from Firestore)
   const historyModifiedRef = useRef(false);
   const initialLoadCompleteRef = useRef(false);
+  const fileInputRef = useRef(null);
 
   // Load image history from Firestore when user logs in
   useEffect(() => {
@@ -96,7 +98,6 @@ function ImagePage() {
           history: history,
           updatedAt: serverTimestamp(),
         }, { merge: true });
-        console.log('Image history saved to Firestore');
       } catch (err) {
         console.error('Error saving image history:', err);
       }
@@ -153,7 +154,11 @@ function ImagePage() {
           prompt: promptToUse,
           aspectRatio,
           resolution,
-          style
+          style,
+          referenceImages: referenceImages.map(img => ({
+            data: img.data,
+            mimeType: img.mimeType,
+          })),
         }),
       });
 
@@ -232,19 +237,89 @@ function ImagePage() {
     document.body.removeChild(link);
   };
 
+  const handleReferenceUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    const newImages = [];
+
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) {
+        continue;
+      }
+
+      if (file.size > 10 * 1024 * 1024) { // 10MB limit
+        alert(`Image too large: ${file.name}\n\nMax size: 10MB`);
+        continue;
+      }
+
+      const dataUrl = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.readAsDataURL(file);
+      });
+
+      newImages.push({
+        name: file.name,
+        dataUrl,
+        data: dataUrl.split(',')[1], // base64 only
+        mimeType: file.type,
+      });
+    }
+
+    setReferenceImages(prev => [...prev, ...newImages].slice(0, 3)); // Max 3 reference images
+    e.target.value = '';
+  };
+
+  const removeReferenceImage = (index) => {
+    setReferenceImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   return (
     <div className="image-page">
       <div className="image-container">
         {/* Top: Prompt Input */}
         <div className="prompt-section">
-          <form className="prompt-form" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Describe the image you want to create..."
-              disabled={isGenerating}
-            />
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleReferenceUpload}
+            accept="image/*"
+            multiple
+            hidden
+          />
+          <div className="prompt-input-box">
+            {/* Reference Images Preview - Inside Input Box */}
+            {referenceImages.length > 0 && (
+              <div className="reference-images-inside">
+                {referenceImages.map((img, index) => (
+                  <div key={index} className="reference-image-thumb">
+                    <img src={img.dataUrl} alt={img.name} />
+                    <button
+                      type="button"
+                      className="remove-reference"
+                      onClick={() => removeReferenceImage(index)}
+                    >
+                      <X size={10} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <form className="prompt-form" onSubmit={handleSubmit}>
+              <button
+                type="button"
+                className="add-reference-btn-main"
+                onClick={() => fileInputRef.current?.click()}
+                title="Add reference images"
+              >
+                <Plus size={20} />
+              </button>
+              <input
+                type="text"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="Describe the image you want to create..."
+                disabled={isGenerating}
+              />
             <button 
               type="submit" 
               className="generate-btn"
@@ -259,7 +334,8 @@ function ImagePage() {
                 </>
               )}
             </button>
-          </form>
+            </form>
+          </div>
         </div>
 
         {/* Main Content: Settings | Image | History */}
@@ -321,6 +397,7 @@ function ImagePage() {
                 ))}
               </div>
             </div>
+
           </aside>
 
           {/* Center: Image Viewer */}

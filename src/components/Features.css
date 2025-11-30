@@ -238,3 +238,39 @@
   }
 }
 
+/* ============================================
+   Dark Mode
+   ============================================ */
+
+[data-theme="dark"] .features {
+  background: #181818;
+}
+
+[data-theme="dark"] .section-title {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .section-desc {
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .feature-card {
+  background: #212121;
+  border-color: #303030;
+}
+
+[data-theme="dark"] .feature-card:hover {
+  border-color: var(--teal-primary);
+}
+
+[data-theme="dark"] .feature-card h3 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .feature-card p {
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .feature-icon {
+  background: rgba(45, 156, 156, 0.15);
+}

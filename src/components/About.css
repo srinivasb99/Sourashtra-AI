@@ -358,3 +358,35 @@
   .symbol-people span:nth-child(8) { transform: translate(-50%, -50%) rotate(315deg) translateY(-55px); }
 }
 
+/* ============================================
+   Dark Mode
+   ============================================ */
+
+[data-theme="dark"] .about {
+  background: #181818;
+}
+
+[data-theme="dark"] .section-title {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .about-text {
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .about-quote {
+  background: #212121;
+  border-left-color: var(--teal-primary);
+}
+
+[data-theme="dark"] .about-quote blockquote {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .about-quote cite {
+  color: #6a6a6a;
+}
+
+[data-theme="dark"] .symbol-core {
+  background: #ffffff;
+}

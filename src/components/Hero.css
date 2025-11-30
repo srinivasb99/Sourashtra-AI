@@ -602,3 +602,69 @@
   .ring-3 { width: 135px; height: 135px; }
 }
 
+/* ============================================
+   Dark Mode
+   ============================================ */
+
+[data-theme="dark"] .hero-badge {
+  background: #212121;
+  border-color: #303030;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .title-line {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .title-accent {
+  color: var(--teal-primary);
+}
+
+[data-theme="dark"] .hero-description {
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .cta-secondary {
+  background: #212121;
+  border-color: #303030;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .cta-secondary:hover {
+  border-color: var(--teal-primary);
+  color: var(--teal-primary);
+}
+
+[data-theme="dark"] .stat-number {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .stat-label {
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .stat-divider {
+  background: #303030;
+}
+
+[data-theme="dark"] .hero-visual-container {
+  background: radial-gradient(circle at center, rgba(45, 156, 156, 0.1) 0%, transparent 70%);
+}
+
+[data-theme="dark"] .bubble {
+  background: #212121;
+  border-color: #303030;
+}
+
+[data-theme="dark"] .bubble-text {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .bubble-translation {
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .orb-core {
+  background: #ffffff;
+  border-color: var(--teal-primary);
+}

@@ -63,6 +63,50 @@
   --transition-slower: 600ms ease;
 }
 
+/* Dark Mode Variables */
+[data-theme="dark"] {
+  /* Keep the same teal colors */
+  --teal-primary: #2d9c9c;
+  --teal-dark: #1a7a7a;
+  --teal-light: #4db8b8;
+  
+  /* Inverted text colors */
+  --navy-dark: #ffffff;
+  --navy-primary: #e5e5e5;
+  --navy-light: #cccccc;
+  
+  /* Dark backgrounds using #181818 base */
+  --mint: #212121;
+  --mint-light: #1f1f1f;
+  --cream: #181818;
+  
+  --white: #181818;
+  --gray-100: #212121;
+  --gray-200: #303030;
+  --gray-300: #3a3a3a;
+  --gray-400: #6a6a6a;
+  --gray-500: #a0a0a0;
+  --gray-600: #e0e0e0;
+  --black: #ffffff;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 40px rgba(45, 156, 156, 0.3);
+}
+
+[data-theme="dark"] body {
+  background: #181818;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .background-pattern {
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(45, 156, 156, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(45, 156, 156, 0.05) 0%, transparent 50%);
+}
+
 /* ============================================
    Reset & Base
    ============================================ */

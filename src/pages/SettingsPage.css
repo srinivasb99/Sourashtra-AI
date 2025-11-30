@@ -2,7 +2,7 @@
 .settings-page {
   min-height: 100vh;
   padding: 2rem;
-  padding-top: 100px;
+  padding-top: 130px;
   background: var(--cream);
   position: relative;
 }
@@ -48,7 +48,7 @@
   background: var(--white);
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-xl);
-  padding: 1.5rem;
+  padding: 1.25rem;
   margin-bottom: 1.5rem;
   box-shadow: var(--shadow-sm);
 }
@@ -57,8 +57,8 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1.25rem;
-  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--gray-200);
 }
 
@@ -77,6 +77,7 @@
   display: flex;
   gap: 2rem;
   align-items: flex-start;
+  position: relative;
 }
 
 .user-profile-large {
@@ -231,6 +232,52 @@
   font-size: 0.95rem;
   color: var(--navy-dark);
   font-weight: 500;
+}
+
+/* Minimal Theme Toggle - Icons Only */
+.theme-toggle-minimal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.theme-icon-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-100);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--gray-400);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.theme-icon-btn:hover {
+  background: var(--mint-light);
+  color: var(--teal-dark);
+}
+
+.theme-icon-btn:hover svg {
+  color: var(--teal-primary);
+}
+
+.theme-icon-btn.active {
+  background: var(--mint-light);
+  border-color: var(--teal-primary);
+  color: var(--teal-dark);
+}
+
+.theme-icon-btn.active svg {
+  color: var(--teal-primary);
+}
+
+.theme-icon-btn svg {
+  transition: color var(--transition-fast);
 }
 
 /* Provider Badges */
@@ -699,6 +746,37 @@
     align-items: center;
   }
 
+  /* Theme toggle - center at top of card on mobile */
+  .account-info-card {
+    padding-top: 3.5rem;
+  }
+  
+  .theme-toggle-minimal {
+    top: 0;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+
+  /* Camera icon repositioned below profile pic on mobile */
+  .profile-photo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .photo-edit-btn {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    margin-top: 0.5rem;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    border-radius: 50%;
+  }
+
   .detail-item {
     flex-direction: column;
     text-align: center;
@@ -808,4 +886,166 @@
     font-size: 0.75rem;
     padding: 0.2rem 0.5rem;
   }
+}
+
+/* ============================================
+   Dark Mode
+   ============================================ */
+
+[data-theme="dark"] .settings-page {
+  background: #181818;
+}
+
+[data-theme="dark"] .settings-page::before {
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(45, 156, 156, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(45, 156, 156, 0.04) 0%, transparent 50%);
+}
+
+[data-theme="dark"] .settings-header h1 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .settings-header p {
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .settings-section {
+  background: #212121;
+  border-color: #303030;
+}
+
+[data-theme="dark"] .settings-section .section-header {
+  border-bottom-color: #303030;
+}
+
+[data-theme="dark"] .settings-section .section-header h2 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .detail-icon {
+  background: rgba(45, 156, 156, 0.15);
+}
+
+[data-theme="dark"] .detail-label {
+  color: #6a6a6a;
+}
+
+[data-theme="dark"] .detail-value {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .provider-badge.google {
+  background: #303030;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .provider-badge.email {
+  background: rgba(45, 156, 156, 0.15);
+  color: var(--teal-primary);
+}
+
+[data-theme="dark"] .settings-action-btn {
+  background: #303030;
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .settings-action-btn:hover {
+  background: rgba(45, 156, 156, 0.15);
+  border-color: var(--teal-primary);
+  color: var(--teal-primary);
+}
+
+[data-theme="dark"] .settings-page .settings-form-group input {
+  background: #303030;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .settings-page .settings-form-group input::placeholder {
+  color: #6a6a6a;
+}
+
+[data-theme="dark"] .settings-page .settings-form-group input:focus {
+  background: #181818;
+  border-color: var(--teal-primary);
+}
+
+[data-theme="dark"] .settings-page .settings-form-group label {
+  color: #e0e0e0;
+}
+
+[data-theme="dark"] .settings-page .settings-btn-cancel {
+  background: #303030;
+  border-color: #303030;
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .settings-page .settings-btn-cancel:hover:not(:disabled) {
+  background: #3a3a3a;
+  border-color: #3a3a3a;
+}
+
+[data-theme="dark"] .password-toggle {
+  color: #6a6a6a;
+}
+
+[data-theme="dark"] .password-toggle:hover {
+  color: var(--teal-primary);
+}
+
+[data-theme="dark"] .danger-zone {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, #212121 100%);
+}
+
+[data-theme="dark"] .danger-info h3 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .danger-info p {
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .settings-page .settings-modal-content {
+  background: #212121;
+}
+
+[data-theme="dark"] .settings-page .settings-modal-header {
+  border-bottom-color: #303030;
+}
+
+[data-theme="dark"] .settings-page .settings-modal-header h2 {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .settings-page .warning-text {
+  color: #a0a0a0;
+}
+
+[data-theme="dark"] .settings-page .settings-modal-actions {
+  background: #181818;
+  border-top-color: #303030;
+}
+
+[data-theme="dark"] .theme-icon-btn {
+  background: #303030;
+  color: #6a6a6a;
+}
+
+[data-theme="dark"] .theme-icon-btn:hover {
+  background: rgba(45, 156, 156, 0.15);
+  color: var(--teal-primary);
+}
+
+[data-theme="dark"] .theme-icon-btn:hover svg {
+  color: var(--teal-primary);
+}
+
+[data-theme="dark"] .theme-icon-btn.active {
+  background: rgba(45, 156, 156, 0.15);
+  border-color: var(--teal-primary);
+  color: var(--teal-primary);
+}
+
+[data-theme="dark"] .theme-icon-btn.active svg {
+  color: var(--teal-primary);
 }

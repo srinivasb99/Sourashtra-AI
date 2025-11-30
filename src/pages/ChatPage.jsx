@@ -313,15 +313,6 @@ function ChatPage() {
                     key={index}
                     className={`message ${message.role === 'user' ? 'user' : 'assistant'}`}
                   >
-                    {message.role !== 'user' && (
-                      <div className="message-avatar">
-                        <img 
-                          src="https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d" 
-                          alt="AI" 
-                          className="ai-avatar-img"
-                        />
-                      </div>
-                    )}
                     <div className="message-content">
                       {/* Show attachments if any */}
                       {message.attachments && message.attachments.length > 0 && (

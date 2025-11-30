@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { User, Mail, Calendar, Shield, Key, Trash2, AlertTriangle, Check, Eye, EyeOff, Camera, Upload } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
+import { User, Mail, Calendar, Shield, Key, Trash2, AlertTriangle, Check, Eye, EyeOff, Camera, Upload, Sun, Moon, Monitor } from 'lucide-react';
 import './SettingsPage.css';
 
 function SettingsPage() {
   const { user, isGoogleUser, changePassword, deleteAccount, updateProfilePhoto } = useAuth();
+  const { theme, setTheme, isDark } = useTheme();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   
@@ -181,6 +183,24 @@ function SettingsPage() {
           </div>
           
           <div className="account-info-card">
+            {/* Theme Toggle - Icons Only */}
+            <div className="theme-toggle-minimal">
+              <button 
+                className={`theme-icon-btn ${theme === 'light' ? 'active' : ''}`}
+                onClick={() => setTheme('light')}
+                title="Light mode"
+              >
+                <Sun size={18} />
+              </button>
+              <button 
+                className={`theme-icon-btn ${theme === 'dark' ? 'active' : ''}`}
+                onClick={() => setTheme('dark')}
+                title="Dark mode"
+              >
+                <Moon size={18} />
+              </button>
+            </div>
+            
             <div className="user-profile-large">
               <div className="profile-photo-container">
                 {user.photoURL ? (

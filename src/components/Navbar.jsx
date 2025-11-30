@@ -43,7 +43,7 @@ function Navbar() {
   return (
     <nav className={`navbar ${isScrolled || !isLandingPage ? 'scrolled' : ''}`}>
       <div className="nav-container">
-        <Link to="/" className="nav-logo">
+        <Link to="/" className="nav-logo" onClick={() => setIsMobileMenuOpen(false)}>
           <div className="logo-icon">
             <img src={LOGO_URL} alt="Sourashtra AI" className="logo-img" />
           </div>
