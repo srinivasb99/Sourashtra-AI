@@ -15,6 +15,7 @@ import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import SettingsPage from './pages/SettingsPage';
+import CommunityPage from './pages/CommunityPage';
 import './App.css';
 
 // Landing Page Component
@@ -49,6 +50,7 @@ function App() {
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/forgot-password" element={<ForgotPasswordPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/community" element={<CommunityPage />} />
             </Routes>
           </main>
         </div>

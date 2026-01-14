@@ -201,17 +201,26 @@
 }
 
 .user-avatar {
-  width: 32px;
-  height: 32px;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px;
+  max-width: 32px;
+  min-height: 32px;
+  max-height: 32px;
   border-radius: 50%;
   border: 2px solid var(--teal-primary);
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .user-avatar-initials,
 .dropdown-avatar-initials {
-  width: 32px;
-  height: 32px;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px;
+  max-width: 32px;
+  min-height: 32px;
+  max-height: 32px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--teal-primary) 0%, var(--teal-dark) 100%);
   color: #fff;
@@ -221,6 +230,7 @@
   align-items: center;
   justify-content: center;
   border: 2px solid var(--teal-primary);
+  flex-shrink: 0;
 }
 
 .dropdown-avatar-initials {

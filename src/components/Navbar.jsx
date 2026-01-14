@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { MessageCircle, Mic, Image, LogOut, ChevronDown, Settings } from 'lucide-react';
+import { MessageCircle, Mic, Image, LogOut, ChevronDown, Settings, Users } from 'lucide-react';
 import './Navbar.css';
 
 const LOGO_URL = 'https://firebasestorage.googleapis.com/v0/b/sourashtra-ai.firebasestorage.app/o/palkar-removebg-preview.png?alt=media&token=cdeccfaf-c19e-43d2-bb58-c853b0a4bd7d';
@@ -73,6 +73,13 @@ function Navbar() {
             onClick={() => setIsMobileMenuOpen(false)}
           >
             <Image size={18} /> Image
+          </Link>
+          <Link 
+            to="/community" 
+            className={location.pathname === '/community' ? 'active' : ''}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <Users size={18} /> Community
           </Link>
           
           {user ? (

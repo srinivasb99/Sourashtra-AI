@@ -47,3 +47,10 @@ jobs:
           rm sa.json
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: Deploy Firestore Rules
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_SOURASHTRA_AI }}' > sa.json
+          export GOOGLE_APPLICATION_CREDENTIALS=sa.json
+          firebase deploy --only firestore:rules
+          rm sa.json
