@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Users, Calendar, Mail } from 'lucide-react';
+import { Users, Calendar, Mail, Crown } from 'lucide-react';
 import './CommunityPage.css';
 
 function CommunityPage() {
@@ -26,6 +26,16 @@ function CommunityPage() {
             id: doc.id,
             ...doc.data()
           });
+        });
+        
+        // Sort users: creator first, then by creation date
+        const creatorEmail = 'srinibaj10@gmail.com';
+        usersList.sort((a, b) => {
+          const aIsCreator = a.email === creatorEmail;
+          const bIsCreator = b.email === creatorEmail;
+          if (aIsCreator && !bIsCreator) return -1;
+          if (!aIsCreator && bIsCreator) return 1;
+          return 0;
         });
         
         setUsers(usersList);
@@ -61,6 +71,10 @@ function CommunityPage() {
       return `${names[0][0]}${names[1][0]}`.toUpperCase();
     }
     return names[0][0].toUpperCase();
+  };
+
+  const isCreator = (user) => {
+    return user.email === 'srinibaj10@gmail.com';
   };
 
   if (loading) {
@@ -111,39 +125,48 @@ function CommunityPage() {
           </div>
         ) : (
           <div className="users-grid">
-            {users.map((user) => (
-              <div key={user.id} className="user-card">
-                <div className="user-avatar-container">
-                  {user.photoURL ? (
-                    <img 
-                      src={user.photoURL} 
-                      alt={user.displayName || 'User'} 
-                      className="user-avatar"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <div className="user-avatar-initials">
-                      {getUserInitials(user.displayName)}
+            {users.map((user) => {
+              const creator = isCreator(user);
+              return (
+                <div key={user.id} className={`user-card ${creator ? 'creator-card' : ''}`}>
+                  {creator && (
+                    <div className="creator-badge">
+                      <Crown size={12} />
+                      <span>Creator</span>
                     </div>
                   )}
+                  <div className="user-avatar-container">
+                    {user.photoURL ? (
+                      <img 
+                        src={user.photoURL} 
+                        alt={user.displayName || 'User'} 
+                        className={`user-avatar ${creator ? 'creator-avatar' : ''}`}
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className={`user-avatar-initials ${creator ? 'creator-avatar' : ''}`}>
+                        {getUserInitials(user.displayName)}
+                      </div>
+                    )}
+                  </div>
+                  <div className="user-info">
+                    <h3 className="user-name">{user.displayName || 'User'}</h3>
+                    {user.email && (
+                      <div className="user-detail">
+                        <Mail size={14} />
+                        <span className="user-email">{user.email}</span>
+                      </div>
+                    )}
+                    {user.createdAt && (
+                      <div className="user-detail">
+                        <Calendar size={14} />
+                        <span>Joined {formatDate(user.createdAt)}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <div className="user-info">
-                  <h3 className="user-name">{user.displayName || 'User'}</h3>
-                  {user.email && (
-                    <div className="user-detail">
-                      <Mail size={14} />
-                      <span className="user-email">{user.email}</span>
-                    </div>
-                  )}
-                  {user.createdAt && (
-                    <div className="user-detail">
-                      <Calendar size={14} />
-                      <span>Joined {formatDate(user.createdAt)}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

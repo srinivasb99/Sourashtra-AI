@@ -200,32 +200,35 @@
   background: var(--gray-200);
 }
 
-.user-avatar {
+/* Navbar-specific avatar styles - scoped to navbar only */
+.navbar .user-avatar,
+.user-menu .user-avatar {
   width: 32px !important;
   height: 32px !important;
-  min-width: 32px;
-  max-width: 32px;
-  min-height: 32px;
-  max-height: 32px;
+  min-width: 32px !important;
+  max-width: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
   border-radius: 50%;
   border: 2px solid var(--teal-primary);
   object-fit: cover;
   flex-shrink: 0;
 }
 
-.user-avatar-initials,
+.navbar .user-avatar-initials,
+.user-menu .user-avatar-initials,
 .dropdown-avatar-initials {
   width: 32px !important;
   height: 32px !important;
-  min-width: 32px;
-  max-width: 32px;
-  min-height: 32px;
-  max-height: 32px;
+  min-width: 32px !important;
+  max-width: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--teal-primary) 0%, var(--teal-dark) 100%);
   color: #fff;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.875rem !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -513,11 +516,17 @@ button.dropdown-item svg {
     box-shadow: 0 1px 3px rgba(0,0,0,0.08);
   }
 
-  .user-avatar,
-  .user-avatar-initials {
-    width: 40px;
-    height: 40px;
-    font-size: 0.9rem;
+  .navbar .user-avatar,
+  .user-menu .user-avatar,
+  .navbar .user-avatar-initials,
+  .user-menu .user-avatar-initials {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+    font-size: 0.9rem !important;
   }
 
   .user-name {
