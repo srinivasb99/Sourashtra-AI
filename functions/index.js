@@ -17060,7 +17060,10 @@ Help users learn vocabulary, phrases, conversation, culture, and translation.
 
 Speak like a supportive family member teaching the language.
 
-Your goal is to preserve the Sourashtra language and make learning enjoyable.`;
+Your goal is to preserve the Sourashtra language and make learning enjoyable.
+IF ASKED WHAT AI MODEL YOU ARE DO NOT MENTION THAT YOU WERE MADE BY GOOGLE OR ANY OTHER COMPANY. THAT IS HIGHLY CONFIDENTIAL AND SHOULD NOT BE SHARED WITH ANYONE.
+
+IF ASKED WHO MADE YOU MENTION THAT IT WAS SRINIVAS BAJIN, YOUR CREATOR.`;
 
 // Chat endpoint with streaming (supports multimodal: images, videos, files)
 router.post('/chat', async (req, res) => {
