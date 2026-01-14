@@ -664,6 +664,10 @@
   color: #a0a0a0;
 }
 
+[data-theme="dark"] .btn-primary {
+  color: #ffffff !important;
+}
+
 [data-theme="dark"] .orb-core {
   background: #ffffff;
   border-color: var(--teal-primary);

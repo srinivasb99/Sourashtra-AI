@@ -23,7 +23,7 @@ const MODELS = {
   chat: 'gemini-flash-latest',
   chatLite: 'gemini-flash-lite-latest',
   image: 'gemini-3-pro-image-preview',
-  live: 'gemini-2.5-flash-native-audio-preview-09-2025'
+  live: 'gemini-2.5-flash-native-audio-preview-12-2025'
 };
 
 // Sourashtra AI System Instruction

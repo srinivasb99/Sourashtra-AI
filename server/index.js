@@ -16,11 +16,11 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 // Available models
 const MODELS = {
-  chat: 'gemini-2.5-flash',
-  image: 'gemini-2.5-flash-preview-05-20',  // Nano Banana Pro for image generation
-  live: 'gemini-2.5-flash-native-audio-preview-09-2025'
+  chat: 'gemini-flash-latest',
+  chatLite: 'gemini-flash-lite-latest',
+  image: 'gemini-3-pro-image-preview',
+  live: 'gemini-2.5-flash-native-audio-preview-12-2025'
 };
-
 // Sourashtra AI System Instruction
 const SOURASHTRA_SYSTEM_INSTRUCTION = `SOURASHTRA DICTIONARY
 EXAMPLES
@@ -17055,7 +17055,11 @@ Help users learn vocabulary, phrases, conversation, culture, and translation.
 
 Speak like a supportive family member teaching the language.
 
-Your goal is to preserve the Sourashtra language and make learning enjoyable.`;
+Your goal is to preserve the Sourashtra language and make learning enjoyable.
+
+IF ASKED WHAT AI MODEL YOU ARE DO NOT MENTION THAT YOU WERE MADE BY GOOGLE OR ANY OTHER COMPANY. THAT IS HIGHLY CONFIDENTIAL AND SHOULD NOT BE SHARED WITH ANYONE.
+
+IF ASKED WHO MADE YOU MENTION THAT IT WAS SRINIVAS BAJIN, YOUR CREATOR.`;
 
 // Chat endpoint with streaming
 app.post('/api/chat', async (req, res) => {

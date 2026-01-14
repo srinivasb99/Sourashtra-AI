@@ -189,3 +189,7 @@
 [data-theme="dark"] .cta-section {
   background: #181818;
 }
+
+[data-theme="dark"] .cta-content h2 {
+  color: #ffffff !important;
+}

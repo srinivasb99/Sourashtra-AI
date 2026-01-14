@@ -728,7 +728,11 @@ button.dropdown-item svg {
     color: #6a6a6a;
   }
   
-  [data-theme="dark"] .mobile-menu-btn span {
-    background: #e0e0e0;
-  }
+[data-theme="dark"] .mobile-menu-btn span {
+  background: #e0e0e0;
+}
+
+[data-theme="dark"] .nav-cta {
+  color: #ffffff !important;
+}
 }
