@@ -37,7 +37,6 @@ Sourashtra AI is a **completely free** platform designed to preserve and teach t
 - Create images with Sourashtra cultural themes
 - Multiple resolutions: 1K, 2K, 4K
 - Various aspect ratios and styles
-- Powered by Gemini
 
 ### 🔐 Authentication
 - Optional Google Sign-In
@@ -48,7 +47,6 @@ Sourashtra AI is a **completely free** platform designed to preserve and teach t
 
 - **Frontend**: React + Vite
 - **Backend**: Firebase Cloud Functions
-- **AI**: Google Gemini (Flash models)
 - **Auth**: Firebase Authentication
 - **Hosting**: Firebase Hosting
 - **Database**: Firebase Firestore
@@ -58,7 +56,6 @@ Sourashtra AI is a **completely free** platform designed to preserve and teach t
 ### Prerequisites
 - Node.js 20+
 - Firebase CLI
-- Google Cloud account with Gemini API access
 
 ### Local Setup
 
@@ -82,7 +79,6 @@ cd server && npm run dev
 
 Create `server/.env`:
 ```
-GEMINI_API_KEY=your_gemini_api_key
 PORT=3002
 ```
 
@@ -106,7 +102,6 @@ This project is open source and available under the MIT License.
 ## 🙏 Acknowledgments
 
 - [Sourashtra Association Inc.](https://sourashtraassociation.org/) - For their work in preserving Sourashtra heritage
-- Google Gemini API - For powering the AI capabilities
 
 ---
 
